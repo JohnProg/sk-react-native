@@ -20,6 +20,9 @@ module.exports = {
         });
     },
     getTrackedMetros(username) {
-        return request('users/' + username + '/metro_areas/tracked.json')
+        return request(`users/${username}/metro_areas/tracked.json`);
+    },
+    getArtistCalendar(artistId) {
+        return request(`artists/${artistId}/calendar.json`);
     }
 }
