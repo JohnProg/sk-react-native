@@ -8,6 +8,7 @@ const {
   View,
   Image,
   ActivityIndicatorIOS,
+  TouchableHighlight,
 } = React;
 
 const api = require('./songkick-api');
@@ -21,7 +22,7 @@ class Songkick extends React.Component {
           component: Artists,
           title: 'My tracked artists'
         }}
-        tintColor="#7ed3f4"
+        tintColor="#ffffff"
         barTintColor="#f80046"
         titleTextColor="#ffffff"
        />
@@ -69,7 +70,10 @@ class Artists extends React.Component {
   }
 
   renderArtist(artist){
-    return <Artist artist={artist}/>
+    return <Artist
+      artist={artist}
+      navigator={this.props.navigator}
+    />
   }
 
   renderLoading(){
@@ -89,7 +93,7 @@ class Artists extends React.Component {
       <ListView
         style={styles.artists}
         dataSource={this.state.dataSource}
-        renderRow={this.renderArtist}
+        renderRow={this.renderArtist.bind(this)}
         onEndReached={this.fetchNextArtists.bind(this)}
       />
     );
@@ -97,15 +101,39 @@ class Artists extends React.Component {
 }
 
 class Artist extends React.Component {
+  artistDetails() {
+    this.props.navigator.push({
+      title: this.props.artist.displayName,
+      component: ArtistDetails,
+      passProps: this.props
+    });
+  }
+
   render() {
     const {artist} = this.props
     return (
-      <View style={styles.artist}>
+      <TouchableHighlight underlayColor={'#cbcbcb'} onPress={this.artistDetails.bind(this)}>
+        <View style={styles.artist}>
+          <Image
+            style={styles.thumbnail}
+            source={ {uri: `https://images.sk-static.com/images/media/profile_images/artists/${artist.id}/large_avatar`} }
+          />
+          <Text style={styles.artistText}>{artist.displayName}</Text>
+        </View>
+      </TouchableHighlight>
+    )
+  }
+}
+
+class ArtistDetails extends React.Component {
+  render() {
+    const {artist} = this.props
+    return (
+      <View style={styles.artistDetails}>
         <Image
-          style={styles.thumbnail}
-          source={ {uri: `https://images.sk-static.com/images/media/profile_images/artists/${artist.id}/large_avatar`} }
+          style={styles.artistDetailsImg}
+          source={ {uri: `https://images.sk-static.com/images/media/profile_images/artists/${artist.id}/huge_avatar`} }
         />
-        <Text style={styles.artistText}>{artist.displayName}</Text>
       </View>
     )
   }
@@ -121,6 +149,13 @@ var styles = StyleSheet.create({
     width: 80,
     height: 80,
   },
+  artistDetailsImg: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginTop: 10,
+    marginBottom: 10,
+  },
   artists: {
     backgroundColor: '#F5FCFF',
   },
@@ -134,6 +169,10 @@ var styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 10,
     fontSize: 20
+  },
+  artistDetails: {
+    flex: 1,
+    paddingTop: 64,
   },
   navigatorios: {
     flex: 1,
