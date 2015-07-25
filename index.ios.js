@@ -70,7 +70,7 @@ class ArtistsScreens extends React.Component {
           username: this.props.username
         }
       }}
-      tintColor="#7ed3f4"
+      tintColor="#ffffff"
       barTintColor="#f80046"
       titleTextColor="#ffffff"
      />)
