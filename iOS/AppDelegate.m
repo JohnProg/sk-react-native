@@ -35,7 +35,7 @@
   bool dev = false;
 
   if(dev) {
-    // NSLog(@"Loading dev...");
+    NSLog(@"Loading dev...");
     jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle"];
   } else {
     NSTimeInterval timestamp = [[NSDate date] timeIntervalSince1970];
@@ -50,15 +50,15 @@
     {
       NSArray   *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
       NSString  *documentsDirectory = [paths objectAtIndex:0];
-      NSString  *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, @"updated.jsbundle"];
+      NSString  *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, @"main.jsbundle"];
 
       [urlData writeToFile:filePath atomically:YES];
       jsCodeLocation = [NSURL URLWithString:filePath];
 
-      // NSLog(@"Loading latest...");
+      NSLog(@"Loading latest...");
     } else {
       jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
-      // NSLog(@"Loading fallback...");
+      NSLog(@"Loading fallback...");
     }
   }
   /**

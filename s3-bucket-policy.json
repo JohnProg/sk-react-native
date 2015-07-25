@@ -1,0 +1,37 @@
+{
+	"Version": "2012-10-17",
+	"Id": "Policy1437820346930",
+	"Statement": [
+		{
+			"Sid": "Stmt1437820143771",
+			"Effect": "Allow",
+			"Principal": "*",
+			"Action": "s3:GetObject",
+			"Resource": "arn:aws:s3:::sk-react-native/*"
+		},
+		{
+			"Sid": "Stmt1437820278713",
+			"Effect": "Allow",
+			"Principal": {
+				"AWS": "arn:aws:iam::317112125475:user/circleci"
+			},
+			"Action": "s3:ListBucket",
+			"Resource": "arn:aws:s3:::sk-react-native"
+		},
+		{
+			"Sid": "Stmt1437820337902",
+			"Effect": "Allow",
+			"Principal": {
+				"AWS": "arn:aws:iam::317112125475:user/circleci"
+			},
+			"Action": [
+				"s3:GetObjectVersion",
+				"s3:DeleteObject",
+				"s3:GetObject",
+				"s3:PutObjectAcl",
+				"s3:PutObject"
+			],
+			"Resource": "arn:aws:s3:::sk-react-native/*"
+		}
+	]
+}
