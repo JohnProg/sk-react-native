@@ -1,11 +1,5 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
-'use strict';
-
-var React = require('react-native');
-var {
+const React = require('react-native');
+const {
   AppRegistry,
   StyleSheet,
   NavigatorIOS,
@@ -16,7 +10,7 @@ var {
   ActivityIndicatorIOS,
 } = React;
 
-var api = require('./songkick-api');
+const api = require('./songkick-api');
 
 class Songkick extends React.Component {
   render() {
@@ -42,17 +36,36 @@ class Artists extends React.Component {
 
     this.state = {
       loaded: false,
-      dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1.id !== r2.id })
+      dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1.id !== r2.id }),
+      page: 1,
+      artists: [],
+      hasMore: true
     }
 
-    this.fetchArtists();
+    this.fetchNextArtists();
   }
 
-  fetchArtists() {
-    api.getTrackedArtists('arnaud-rinquin').then((data) => this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(data.resultsPage.results.artist),
-      loaded: true
-    }))
+  fetchNextArtists() {
+    if (!this.state.hasMore || this.state.loadingMore) return;
+
+    this.setState({
+      loadingMore: true
+    });
+
+    api.getTrackedArtists('arnaud-rinquin', this.state.page).then((data) => {
+      const newArtists = data.resultsPage.results.artist;
+      const artists = this.state.artists.concat(newArtists);
+      const totalEntries = data.resultsPage.totalEntries;
+
+      this.setState({
+        dataSource: this.state.dataSource.cloneWithRows(artists),
+        loaded: true,
+        loadingMore: false,
+        page: ++this.state.page,
+        artists,
+        hasMore: artists.length < totalEntries
+      });
+    })
   }
 
   renderArtist(artist){
@@ -77,6 +90,7 @@ class Artists extends React.Component {
         style={styles.artists}
         dataSource={this.state.dataSource}
         renderRow={this.renderArtist}
+        onEndReached={this.fetchNextArtists.bind(this)}
       />
     );
   }
