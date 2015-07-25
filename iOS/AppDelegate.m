@@ -31,8 +31,36 @@
    * on the same Wi-Fi network.
    */
 
-  jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle"];
+  // jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle"];
+  bool dev = false;
 
+  if(dev) {
+    // NSLog(@"Loading dev...");
+    jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle"];
+  } else {
+    NSTimeInterval timestamp = [[NSDate date] timeIntervalSince1970];
+    NSString *cdn = [NSString stringWithFormat:
+                     @"https://sk-react-native.s3.amazonaws.com/main.jsbundle?cache=%f",
+                     timestamp
+                    ];
+
+    NSURL  *url = [NSURL URLWithString:cdn];
+    NSData *urlData = [NSData dataWithContentsOfURL:url];
+    if (urlData)
+    {
+      NSArray   *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+      NSString  *documentsDirectory = [paths objectAtIndex:0];
+      NSString  *filePath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, @"updated.jsbundle"];
+
+      [urlData writeToFile:filePath atomically:YES];
+      jsCodeLocation = [NSURL URLWithString:filePath];
+
+      // NSLog(@"Loading latest...");
+    } else {
+      jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+      // NSLog(@"Loading fallback...");
+    }
+  }
   /**
    * OPTION 2
    * Load from pre-bundled file on disk. To re-generate the static bundle
