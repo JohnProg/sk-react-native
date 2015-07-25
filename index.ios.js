@@ -12,6 +12,12 @@ var {
   View,
 } = React;
 
+var api = require('./songkick-api');
+
+api.getTrackedArtists('arnaud-rinquin').then(function(data){
+  console.log(data);
+});
+
 var songkick = React.createClass({
   render: function() {
     return (
