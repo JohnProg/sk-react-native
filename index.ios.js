@@ -10,23 +10,70 @@ const {
   ActivityIndicatorIOS,
   TouchableHighlight,
 } = React;
+const {
+  TabBarIOS,
+} = require('react-native-icons');
 
 const api = require('./songkick-api');
 
 class Songkick extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      selectedTab: 'myArtists',
+    };
+  }
+
   render() {
     return (
-      <NavigatorIOS
-        style={styles.navigatorios}
-        initialRoute={{
-          component: Artists,
-          title: 'My tracked artists'
-        }}
+      <TabBarIOS
         tintColor="#ffffff"
-        barTintColor="#f80046"
-        titleTextColor="#ffffff"
-       />
+        barTintColor="#f80046">
+        <TabBarIOS.Item
+          title="Arnaud's"
+          iconName='foundation|star'
+          selected={this.state.selectedTab === 'myArtists'}
+          onPress={() => {
+            this.setState({
+              selectedTab: 'myArtists',
+            });
+          }}>
+
+          <ArtistsScreens username='arnaud-rinquin'/>
+        </TabBarIOS.Item>
+        <TabBarIOS.Item
+          title="Victor's"
+          iconName='foundation|heart'
+          selected={this.state.selectedTab === 'vjoArtists'}
+          onPress={() => {
+            this.setState({
+              selectedTab: 'vjoArtists',
+            });
+          }}>
+
+          <ArtistsScreens username='vjo'/>
+        </TabBarIOS.Item>
+      </TabBarIOS>
     );
+  }
+}
+
+class ArtistsScreens extends React.Component {
+  render() {
+    return (<NavigatorIOS
+      style={styles.navigatorios}
+      initialRoute={{
+        component: Artists,
+        title: 'My tracked artists',
+        passProps: {
+          username: this.props.username
+        }
+      }}
+      tintColor="#7ed3f4"
+      barTintColor="#f80046"
+      titleTextColor="#ffffff"
+     />)
   }
 }
 
@@ -42,10 +89,10 @@ class Artists extends React.Component {
       artists: [],
       hasMore: true
     }
-
+  }
+  componentWillMount(){
     this.fetchNextArtists();
   }
-
   fetchNextArtists() {
     if (!this.state.hasMore || this.state.loadingMore) return;
 
@@ -53,7 +100,7 @@ class Artists extends React.Component {
       loadingMore: true
     });
 
-    api.getTrackedArtists('arnaud-rinquin', this.state.page).then((data) => {
+    api.getTrackedArtists(this.props.username, this.state.page).then((data) => {
       const newArtists = data.resultsPage.results.artist;
       const artists = this.state.artists.concat(newArtists);
       const totalEntries = data.resultsPage.totalEntries;
