@@ -3,6 +3,7 @@ import moment from 'moment';
 import api from './songkick-api';
 import colors from './colors';
 import ConcertScreen from './screens/concerts/concert-screens';
+import EventDetails from './screens/artists/event-details';
 
 const {
   AppRegistry,
@@ -222,6 +223,7 @@ class ArtistDetails extends React.Component {
   renderEvent(event){
     return <Event
       event={event}
+      artist={this.props.artist}
       navigator={this.props.navigator}
     />
   }
@@ -277,7 +279,7 @@ class ArtistDetails extends React.Component {
 class Event extends React.Component {
   eventDetails() {
     this.props.navigator.push({
-      title: this.props.event.location.city,
+      title: this.props.artist.displayName,
       component: EventDetails,
       passProps: this.props
     });
@@ -416,7 +418,7 @@ var styles = StyleSheet.create({
     flex: 1,
   },
   navigatorios: {
-    flex: 1
+    flex: 1,
   },
   centering: {
     flex: 1,
