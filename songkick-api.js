@@ -24,5 +24,11 @@ module.exports = {
     },
     getArtistCalendar(artistId) {
         return request(`artists/${artistId}/calendar.json`);
+    },
+    getUserCalendar(username, pageIndex = 1) {
+        return request(`users/${username}/calendar.json`, {
+          page: pageIndex,
+          reason: 'tracked_artist'
+        });
     }
 }

@@ -31,7 +31,7 @@ class Songkick extends React.Component {
     StatusBarIOS.setStyle('light-content');
 
     this.state = {
-      selectedTab: 'artists',
+      selectedTab: 'concerts',
       username: 'arnaud-rinquin',
     };
   }

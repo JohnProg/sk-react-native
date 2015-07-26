@@ -32,7 +32,7 @@
    */
 
   // jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle"];
-  bool dev = false;
+  bool dev = true;
 
   if(dev) {
     NSLog(@"Loading dev...");
