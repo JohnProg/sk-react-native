@@ -12,6 +12,7 @@ An experimentation to see how cool is React Native:
 * [Project using an Amazon S3 bucket to host js bundle](https://github.com/JoeStanton/london-react/)
 * [Continuous deployment to S3 using CircleCI](http://benlopatin.com/deploying-static-sites-circle-ci/)
 * [React Parts components library](https://react.parts/native-ios)
+* [How to render ListView with section headers](http://moduscreate.com/react-native-listview-with-section-headers/)
 
 # Notes
 
