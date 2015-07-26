@@ -1,4 +1,5 @@
 const React = require('react-native');
+const moment = require('moment');
 const {
   AppRegistry,
   StyleSheet,
@@ -13,7 +14,6 @@ const {
 const {
   TabBarIOS,
 } = require('react-native-icons');
-
 const api = require('./songkick-api');
 
 class Songkick extends React.Component {
@@ -173,7 +173,66 @@ class Artist extends React.Component {
 }
 
 class ArtistDetails extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      loaded: false,
+      dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1.id !== r2.id }),
+      page: 1,
+      events: [],
+      hasMore: true
+    }
+  }
+
+  componentWillMount(){
+    this.fetchEvents();
+  }
+
+  fetchEvents() {
+    if (!this.state.hasMore || this.state.loadingMore) return;
+
+    this.setState({
+      loadingMore: true
+    });
+
+    api.getArtistCalendar(this.props.artist.id).then((data) => {
+      const newEvents = data.resultsPage.results.event;
+      const events = this.state.events.concat(newEvents);
+      const totalEntries = data.resultsPage.totalEntries;
+
+      this.setState({
+        dataSource: this.state.dataSource.cloneWithRows(events),
+        loaded: true,
+        loadingMore: false,
+        page: ++this.state.page,
+        events,
+        hasMore: events.length < totalEntries
+      });
+    });
+  }
+
+  renderEvent(event){
+    return <Event
+      event={event}
+      navigator={this.props.navigator}
+    />
+  }
+
+  renderLoading(){
+    const {artist} = this.props
+    return (
+      <View style={styles.centering} >
+        <ActivityIndicatorIOS color="#f80046" size="large"/>
+      </View>
+    );
+  }
+
   render() {
+    if (!this.state.loaded) {
+      return this.renderLoading();
+    }
+
     const {artist} = this.props
     return (
       <View style={styles.artistDetails}>
@@ -181,11 +240,69 @@ class ArtistDetails extends React.Component {
           style={styles.artistDetailsImg}
           source={ {uri: `https://images.sk-static.com/images/media/profile_images/artists/${artist.id}/huge_avatar`} }
         />
+        <ListView
+          style={styles.events}
+          dataSource={this.state.dataSource}
+          renderRow={this.renderEvent.bind(this)}
+          onEndReached={this.fetchEvents.bind(this)}
+        />
       </View>
-    )
+    );
   }
 }
 
+class Event extends React.Component {
+  eventDetails() {
+    this.props.navigator.push({
+      title: this.props.event.location.city,
+      component: EventDetails,
+      passProps: this.props
+    });
+  }
+
+  // Remove date from event name
+  removeDate(name) {
+    const index = name.indexOf(' (');
+    if(index !== -1){
+      return name.substring(0, index);
+    } else {
+      return name;
+    }
+  }
+
+  renderDate(date) {
+    const d = moment(date);
+    return (
+      <View style={styles.eventDate}>
+        <Text style={styles.eventDateDay}>{d.format('DD MMM')}</Text>
+        <Text style={styles.eventDateYear}>{d.format('YYYY')}</Text>
+      </View>
+    );
+  }
+
+  renderEventNameAndLocation(event) {
+    const name = this.removeDate(event.displayName);
+    const {city} = event.location;
+    return (
+      <View style={styles.eventName}>
+        <Text style={styles.eventText}>{name}</Text>
+        <Text style={styles.eventLocation}>{city}</Text>
+      </View>
+    )
+  }
+
+  render() {
+    const {event} = this.props
+    return (
+      <TouchableHighlight underlayColor={'#cbcbcb'} onPress={this.eventDetails.bind(this)}>
+        <View style={styles.event}>
+          {this.renderDate(event.start.date)}
+          {this.renderEventNameAndLocation.bind(this)(event)}
+        </View>
+      </TouchableHighlight>
+    )
+  }
+}
 
 var styles = StyleSheet.create({
   container: {
@@ -211,6 +328,27 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
+  },
+  event:{
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#cacaca',
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+  eventText: {
+    flex: 1,
+    fontSize: 15,
+    color: '#ffffff',
+  },
+  eventDate: {
+    width: 60,
+    paddingLeft: 10,
+  },
+  eventDateDay: {},
+  eventDateYear: {
+    fontWeight: 'bold',
   },
   artistText: {
     flex: 1,
