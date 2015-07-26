@@ -1,5 +1,8 @@
-const React = require('react-native');
-const moment = require('moment');
+import React from 'react-native';
+import moment from 'moment';
+import api from './songkick-api';
+import colors from './colors';
+
 const {
   AppRegistry,
   StyleSheet,
@@ -10,49 +13,41 @@ const {
   Image,
   ActivityIndicatorIOS,
   TouchableHighlight,
+  StatusBarIOS,
 } = React;
+
 const {
   TabBarIOS,
 } = require('react-native-icons');
-const api = require('./songkick-api');
+
+
+import ConcertScreen from './screens/concerts/concert-screens';
 
 class Songkick extends React.Component {
   constructor() {
     super();
 
+    StatusBarIOS.setStyle('light-content');
+
     this.state = {
-      selectedTab: 'myArtists',
+      selectedTab: 'artists',
+      username: 'arnaud-rinquin',
     };
   }
 
   render() {
     return (
-      <TabBarIOS
-        tintColor="#ffffff"
-        barTintColor="#f80046">
-        <TabBarIOS.Item
-          title="Arnaud's"
-          iconName='foundation|star'
-          selected={this.state.selectedTab === 'myArtists'}
-          onPress={() => {
-            this.setState({
-              selectedTab: 'myArtists',
-            });
-          }}>
-
-          <ArtistsScreens username='arnaud-rinquin'/>
+      <TabBarIOS tintColor={colors.pink} barTintColor={colors.darker} translucent={false}>
+        <TabBarIOS.Item title="Concerts" iconName='foundation|music'
+                        selected={this.state.selectedTab === 'concerts'}
+                        onPress={() => { this.setState({ selectedTab: 'concerts', }); }}>
+          <ConcertScreen username={this.state.username}/>
         </TabBarIOS.Item>
-        <TabBarIOS.Item
-          title="Victor's"
-          iconName='foundation|heart'
-          selected={this.state.selectedTab === 'vjoArtists'}
-          onPress={() => {
-            this.setState({
-              selectedTab: 'vjoArtists',
-            });
-          }}>
 
-          <ArtistsScreens username='vjo'/>
+        <TabBarIOS.Item title="Artists" iconName='foundation|microphone'
+                        selected={this.state.selectedTab === 'artists'}
+                        onPress={() => { this.setState({ selectedTab: 'artists', }); }}>
+          <ArtistsScreens username={this.state.username}/>
         </TabBarIOS.Item>
       </TabBarIOS>
     );
@@ -65,14 +60,15 @@ class ArtistsScreens extends React.Component {
       style={styles.navigatorios}
       initialRoute={{
         component: Artists,
-        title: 'My tracked artists',
+        title: 'Your artists',
         passProps: {
           username: this.props.username
         }
       }}
-      tintColor="#ffffff"
-      barTintColor="#f80046"
-      titleTextColor="#ffffff"
+      tintColor={colors.light}
+      barTintColor={colors.darker}
+      titleTextColor={colors.light}
+      translucent={false}
      />)
   }
 }
@@ -126,7 +122,7 @@ class Artists extends React.Component {
   renderLoading(){
     return (
       <View style={styles.centering} >
-        <ActivityIndicatorIOS color="#f80046" size="large"/>
+        <ActivityIndicatorIOS color={colors.pink} size="large"/>
       </View>
     );
   }
@@ -159,7 +155,7 @@ class Artist extends React.Component {
   render() {
     const {artist} = this.props
     return (
-      <TouchableHighlight underlayColor={'#cbcbcb'} onPress={this.artistDetails.bind(this)}>
+      <TouchableHighlight underlayColor={colors.pink} activeOpacity={0.5} onPress={this.artistDetails.bind(this)}>
         <View style={styles.artist}>
           <Image
             style={styles.thumbnail}
@@ -198,6 +194,16 @@ class ArtistDetails extends React.Component {
 
     api.getArtistCalendar(this.props.artist.id).then((data) => {
       const newEvents = data.resultsPage.results.event;
+
+      if (!newEvents) {
+        this.setState({
+          loaded: true,
+          hasMore: false,
+          events: []
+        });
+        return;
+      }
+
       const events = this.state.events.concat(newEvents);
       const totalEntries = data.resultsPage.totalEntries;
 
@@ -223,7 +229,7 @@ class ArtistDetails extends React.Component {
     const {artist} = this.props
     return (
       <View style={styles.centering} >
-        <ActivityIndicatorIOS color="#f80046" size="large"/>
+        <ActivityIndicatorIOS color={colors.pink} size="large"/>
       </View>
     );
   }
@@ -234,12 +240,20 @@ class ArtistDetails extends React.Component {
     }
 
     const {artist} = this.props
+
+    var msg;
+
+    if (this.state.events && !this.state.events.length) {
+      msg = (<Text>No events for artist</Text>)
+    }
+
     return (
       <View style={styles.artistDetails}>
         <Image
           style={styles.artistDetailsImg}
           source={ {uri: `https://images.sk-static.com/images/media/profile_images/artists/${artist.id}/huge_avatar`} }
         />
+        {msg}
         <ListView
           style={styles.events}
           dataSource={this.state.dataSource}
@@ -294,7 +308,7 @@ class Event extends React.Component {
   render() {
     const {event} = this.props
     return (
-      <TouchableHighlight underlayColor={'#cbcbcb'} onPress={this.eventDetails.bind(this)}>
+      <TouchableHighlight underlayColor={colors.pink} onPress={this.eventDetails.bind(this)}>
         <View style={styles.event}>
           {this.renderDate(event.start.date)}
           {this.renderEventNameAndLocation.bind(this)(event)}
@@ -307,11 +321,16 @@ class Event extends React.Component {
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5FCFF',
+    backgroundColor: colors.dark,
   },
   thumbnail: {
-    width: 80,
-    height: 80,
+    marginTop: 5,
+    marginBottom: 5,
+    marginLeft: 10,
+    marginRight: 10,
+    width: 50,
+    height: 50,
+    borderRadius: 20,
   },
   artistDetailsImg: {
     width: 100,
@@ -321,13 +340,13 @@ var styles = StyleSheet.create({
     marginBottom: 10,
   },
   artists: {
-    backgroundColor: '#F5FCFF',
+    backgroundColor: colors.dark,
+
   },
   artist: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
   },
   event:{
     flex: 1,
@@ -340,7 +359,7 @@ var styles = StyleSheet.create({
   eventText: {
     flex: 1,
     fontSize: 15,
-    color: '#ffffff',
+    color: colors.light,
   },
   eventDate: {
     width: 60,
@@ -352,16 +371,15 @@ var styles = StyleSheet.create({
   },
   artistText: {
     flex: 1,
-    paddingLeft: 10,
-    fontSize: 20
+    fontSize: 16,
+    color: colors.light
   },
   artistDetails: {
     flex: 1,
     paddingTop: 64,
   },
   navigatorios: {
-    flex: 1,
-    backgroundColor: '#1b1d24'
+    flex: 1
   },
   centering: {
     flex: 1,
