@@ -21,6 +21,11 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
+		4CEEB8E51B654491004FE356 /* FontAwesome.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4CEEB8E41B654491004FE356 /* FontAwesome.otf */; };
+		4CEEB8F81B6548F9004FE356 /* BlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEEB8F51B6548F9004FE356 /* BlurView.m */; };
+		4CEEB8F91B6548F9004FE356 /* BlurViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEEB8F71B6548F9004FE356 /* BlurViewManager.m */; };
+		4CEEB8FF1B654906004FE356 /* VibrancyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEEB8FC1B654906004FE356 /* VibrancyView.m */; };
+		4CEEB9001B654906004FE356 /* VibrancyViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEEB8FE1B654906004FE356 /* VibrancyViewManager.m */; };
 		517142161B650617001B5370 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 517142151B650617001B5370 /* Media.xcassets */; };
 		51D7EB2F1B64112300626671 /* libReactNativeIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D7EB2E1B6410F600626671 /* libReactNativeIcons.a */; };
 		51D7EB311B64118A00626671 /* foundation-icons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 51D7EB301B64118A00626671 /* foundation-icons.ttf */; };
@@ -133,6 +138,15 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = iOS/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = iOS/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
+		4CEEB8E41B654491004FE356 /* FontAwesome.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.otf; path = "node_modules/react-native-icons/ios/ReactNativeIcons/Libraries/FontAwesomeKit/FontAwesome.otf"; sourceTree = "<group>"; };
+		4CEEB8F41B6548F9004FE356 /* BlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlurView.h; sourceTree = "<group>"; };
+		4CEEB8F51B6548F9004FE356 /* BlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlurView.m; sourceTree = "<group>"; };
+		4CEEB8F61B6548F9004FE356 /* BlurViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlurViewManager.h; sourceTree = "<group>"; };
+		4CEEB8F71B6548F9004FE356 /* BlurViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlurViewManager.m; sourceTree = "<group>"; };
+		4CEEB8FB1B654906004FE356 /* VibrancyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VibrancyView.h; sourceTree = "<group>"; };
+		4CEEB8FC1B654906004FE356 /* VibrancyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VibrancyView.m; sourceTree = "<group>"; };
+		4CEEB8FD1B654906004FE356 /* VibrancyViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VibrancyViewManager.h; sourceTree = "<group>"; };
+		4CEEB8FE1B654906004FE356 /* VibrancyViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VibrancyViewManager.m; sourceTree = "<group>"; };
 		517142151B650617001B5370 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		51D7EB1F1B6410F600626671 /* ReactNativeIcons.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeIcons.xcodeproj; path = "node_modules/react-native-icons/ios/ReactNativeIcons.xcodeproj"; sourceTree = "<group>"; };
 		51D7EB301B64118A00626671 /* foundation-icons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "foundation-icons.ttf"; path = "node_modules/react-native-icons/ios/ReactNativeIcons/Libraries/FontAwesomeKit/foundation-icons.ttf"; sourceTree = "<group>"; };
@@ -263,6 +277,30 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		4CEEB8F31B6548F9004FE356 /* RNBlur */ = {
+			isa = PBXGroup;
+			children = (
+				4CEEB8F41B6548F9004FE356 /* BlurView.h */,
+				4CEEB8F51B6548F9004FE356 /* BlurView.m */,
+				4CEEB8F61B6548F9004FE356 /* BlurViewManager.h */,
+				4CEEB8F71B6548F9004FE356 /* BlurViewManager.m */,
+			);
+			name = RNBlur;
+			path = "node_modules/react-native-blur/RNBlur";
+			sourceTree = "<group>";
+		};
+		4CEEB8FA1B654906004FE356 /* RNVibrancy */ = {
+			isa = PBXGroup;
+			children = (
+				4CEEB8FB1B654906004FE356 /* VibrancyView.h */,
+				4CEEB8FC1B654906004FE356 /* VibrancyView.m */,
+				4CEEB8FD1B654906004FE356 /* VibrancyViewManager.h */,
+				4CEEB8FE1B654906004FE356 /* VibrancyViewManager.m */,
+			);
+			name = RNVibrancy;
+			path = "node_modules/react-native-blur/RNVibrancy";
+			sourceTree = "<group>";
+		};
 		51D7EB201B6410F600626671 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -307,6 +345,9 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				4CEEB8FA1B654906004FE356 /* RNVibrancy */,
+				4CEEB8F31B6548F9004FE356 /* RNBlur */,
+				4CEEB8E41B654491004FE356 /* FontAwesome.otf */,
 				517142151B650617001B5370 /* Media.xcassets */,
 				51D7EB301B64118A00626671 /* foundation-icons.ttf */,
 				51D7EB1F1B6410F600626671 /* ReactNativeIcons.xcodeproj */,
@@ -539,6 +580,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				51D7EB311B64118A00626671 /* foundation-icons.ttf in Resources */,
+				4CEEB8E51B654491004FE356 /* FontAwesome.otf in Resources */,
 				008F07F31AC5B25A0029DE68 /* main.jsbundle in Resources */,
 				517142161B650617001B5370 /* Media.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
@@ -562,6 +604,10 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				4CEEB8F81B6548F9004FE356 /* BlurView.m in Sources */,
+				4CEEB8F91B6548F9004FE356 /* BlurViewManager.m in Sources */,
+				4CEEB9001B654906004FE356 /* VibrancyViewManager.m in Sources */,
+				4CEEB8FF1B654906004FE356 /* VibrancyView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,6 +9,7 @@
     "moment": "^2.10.5",
     "query-string": "^2.4.0",
     "react-native": "^0.8.0",
+    "react-native-blur": "^0.5.4",
     "react-native-icons": "^0.2.0"
   }
 }
