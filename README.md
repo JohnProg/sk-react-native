@@ -47,6 +47,18 @@ The only two things you need to from the CircleCI website is :
 * `git push origin master`
 * Sip some margarita
 
+### Mother effing splash and icons images
+
+Who would have imagined how painful this could be?
+
+Headache-less way of doing it:
+
+1. Create a 1000x1000px icon ; logo should be ~750px
+1. Create a 2048x2048px splash screen ; logo should be ~1000px, centered
+1. Install [this app](https://itunes.apple.com/gb/app/asset-catalog-creator-free/id866571115?mt=12)
+1. Pay £1.49 for the splash screen export, best £1.49 spent ever
+1. Follow the instructions, this is easy
+
 ## Troubleshooting
 
 ### Project local setup
