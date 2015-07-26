@@ -11,6 +11,7 @@ An experimentation to see how cool is React Native:
 * [Slick official tutorial](https://facebook.github.io/react-native/docs/getting-started.html)
 * [Project using an Amazon S3 bucket to host js bundle](https://github.com/JoeStanton/london-react/)
 * [Continuous deployment to S3 using CircleCI](http://benlopatin.com/deploying-static-sites-circle-ci/)
+* [React Parts components library](https://react.parts/native-ios)
 
 # Notes
 
