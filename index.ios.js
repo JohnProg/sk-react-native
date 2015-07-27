@@ -16,6 +16,7 @@ const {
   ActivityIndicatorIOS,
   TouchableHighlight,
   StatusBarIOS,
+  ScrollView,
 } = React;
 
 const {
@@ -176,7 +177,6 @@ class ArtistDetails extends React.Component {
 
     this.state = {
       loaded: false,
-      dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1.id !== r2.id }),
       page: 1,
       events: [],
       hasMore: true
@@ -208,15 +208,17 @@ class ArtistDetails extends React.Component {
 
       const events = this.state.events.concat(newEvents);
       const totalEntries = data.resultsPage.totalEntries;
+      const hasMore = events.length < totalEntries;
 
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(events),
         loaded: true,
         loadingMore: false,
         page: ++this.state.page,
         events,
-        hasMore: events.length < totalEntries
+        hasMore,
       });
+
+      if (hasMore) this.fetchEvents();
     });
   }
 
@@ -225,6 +227,7 @@ class ArtistDetails extends React.Component {
       event={event}
       artist={this.props.artist}
       navigator={this.props.navigator}
+      key={event.id}
     />
   }
 
@@ -248,7 +251,7 @@ class ArtistDetails extends React.Component {
     if (this.state.events && !this.state.events.length) {
       msg = (
         <View style={styles.centering}>
-          <Text style={{color: colors.light, fontWeight: 'bold',}}>No events for artist :(</Text>
+          <Text style={{color: colors.light, fontWeight: 'bold', marginTop: 100}}>No upcoming events</Text>
         </View>
       );
     }
@@ -260,18 +263,16 @@ class ArtistDetails extends React.Component {
           source={ {uri: `https://images.sk-static.com/images/media/profile_images/artists/${artist.id}/huge_avatar`} }
         >
           <BlurView blurType="dark" style={{flex: 1, backgroundColor: 'transparent',}}>
-            <View style={styles.artistDetailsImgContainer}>
-              <Image
-                style={styles.artistDetailsImg}
-                source={{uri: `https://images.sk-static.com/images/media/profile_images/artists/${artist.id}/huge_avatar`}}
-              />
-            </View>
-            {msg}
-            <ListView
-              dataSource={this.state.dataSource}
-              renderRow={this.renderEvent.bind(this)}
-              onEndReached={this.fetchEvents.bind(this)}
-            />
+            <ScrollView style={{flex: 1}}>
+              <View style={styles.artistDetailsImgContainer}>
+                <Image
+                  style={styles.artistDetailsImg}
+                  source={{uri: `https://images.sk-static.com/images/media/profile_images/artists/${artist.id}/huge_avatar`}}
+                />
+              </View>
+              {msg}
+              {this.state.events.map(this.renderEvent.bind(this))}
+            </ScrollView>
           </BlurView>
         </Image>
       </View>
@@ -419,6 +420,7 @@ var styles = StyleSheet.create({
   },
   artistDetails: {
     flex: 1,
+    paddingBottom: 108,
   },
   navigatorios: {
     flex: 1,
