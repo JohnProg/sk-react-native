@@ -242,12 +242,15 @@ class ArtistDetails extends React.Component {
       return this.renderLoading();
     }
 
-    const {artist} = this.props
-
+    const {artist} = this.props;
     var msg;
 
     if (this.state.events && !this.state.events.length) {
-      msg = (<Text>No events for artist</Text>)
+      msg = (
+        <View style={styles.centering}>
+          <Text style={{color: colors.light, fontWeight: 'bold',}}>No events for artist :(</Text>
+        </View>
+      );
     }
 
     return (
