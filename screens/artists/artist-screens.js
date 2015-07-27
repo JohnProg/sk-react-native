@@ -26,6 +26,20 @@ const {
 import EventDetails from './event-details';
 
 class ArtistScreen extends React.Component {
+
+  constructor(){
+    super();
+    this.state = {
+      currentArtistID: null
+    }
+  }
+
+  setCurrentArtistId(currentArtistID) {
+    this.setState({
+      currentArtistID
+    });
+  }
+
   render() {
     return (<NavigatorIOS
       style={styles.navigatorios}
@@ -33,7 +47,8 @@ class ArtistScreen extends React.Component {
         component: Artists,
         title: 'Your artists',
         passProps: {
-          username: this.props.username
+          username: this.props.username,
+          setCurrentArtistId: this.setCurrentArtistId.bind(this),
         }
       }}
       tintColor={colors.light}
@@ -87,6 +102,7 @@ class Artists extends React.Component {
     return <Artist
       artist={artist}
       navigator={this.props.navigator}
+      setCurrentArtistId={this.props.setCurrentArtistId}
     />
   }
 
@@ -152,7 +168,12 @@ class ArtistDetails extends React.Component {
     }
   }
 
+  componentWillUnmount(){
+    this.props.setCurrentArtistId(false);
+  }
+
   componentWillMount(){
+    this.props.setCurrentArtistId(this.props.artist.id);
     this.fetchEvents();
   }
 
