@@ -150,8 +150,9 @@ class Artist extends React.Component {
   artistDetails() {
     this.props.navigator.push({
       title: this.props.artist.displayName,
+      backButtonTitle: ' ',
       component: ArtistDetails,
-      passProps: this.props
+      passProps: this.props,
     });
   }
 
@@ -285,6 +286,7 @@ class Event extends React.Component {
     this.props.navigator.push({
       title: this.props.artist.displayName,
       component: EventDetails,
+      backButtonTitle: ' ',
       passProps: this.props
     });
   }
