@@ -1,19 +1,21 @@
 import React from 'react-native';
 import colors from '../../colors';
+import UserCalendar from './user-calendar';
 
 const {
   NavigatorIOS,
 } = React;
 
-import CalendarEntries from './calendar-entries';
-
+const propTypes = {
+  username: React.PropTypes.string.isRequired
+};
 class ConcertScreen extends React.Component {
   render() {
     return (
       <NavigatorIOS
         style={styles.navigatorios}
         initialRoute={{
-          component: CalendarEntries,
+          component: UserCalendar,
           title: 'Your concerts',
           passProps: {
             username: this.props.username
@@ -34,4 +36,5 @@ const styles = {
   }
 };
 
+ConcertScreen.propTypes = propTypes;
 export default ConcertScreen;

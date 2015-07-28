@@ -1,15 +1,16 @@
 import React from 'react-native';
-import { UserCalendarPaginator } from '../../songkick-api';
 import colors from '../../colors';
 import CalendarEntry from './calendar-entry';
 import moment from 'moment';
 
 const {
-  Text,
   ListView,
-  ActivityIndicatorIOS,
-  View,
+  Text,
 } = React;
+
+const propTypes = {
+  entries: React.PropTypes.array.isRequired
+};
 
 class CalendarEntries extends React.Component {
 
@@ -17,31 +18,16 @@ class CalendarEntries extends React.Component {
     super();
 
     this.state = {
-      loaded: false,
       dataSource: new ListView.DataSource({
           getSectionData          : (dataBlob, sectionID) => dataBlob[sectionID],
           getRowData              : (dataBlob, sectionID, rowID) => dataBlob[sectionID + ':' + rowID],
           rowHasChanged           : (row1, row2) => row1 !== row2,
           sectionHeaderHasChanged : (s1, s2) => s1 !== s2
       }),
-      entries: [],
     };
-
-    this.setCalendarEntries = this.setCalendarEntries.bind(this);
-    this.paginator = new UserCalendarPaginator();
   }
 
-  componentWillMount(){
-    this.fetchNextCalendarEntries();
-  }
-
-  fetchNextCalendarEntries() {
-    const {username} = this.props;
-    this.paginator.fetchNext({username}).then(this.setCalendarEntries);
-  }
-
-  setCalendarEntries(entries) {
-    console.log('entries', entries);
+  entriesToDataSource(entries) {
     const entriesByDate = entries.reduce(function(result, entry){
       const date = entry.event.start.date;
       result[date] = result[date] || [];
@@ -67,13 +53,7 @@ class CalendarEntries extends React.Component {
       });
     });
 
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
-      loaded: true,
-      loadingMore: false,
-      page: ++this.state.page,
-      entries,
-    });
+    return this.state.dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs);
   }
 
   renderCalendarEntries(calendarEntry){
@@ -85,30 +65,15 @@ class CalendarEntries extends React.Component {
     return <Text style={styles.dateSection}>{formatted}</Text>;
   }
 
-  renderLoading(){
-    return (
-      <View style={styles.centering}>
-        <ActivityIndicatorIOS color={colors.light} size="large"/>
-      </View>
-    );
-  }
-
-  renderListView(){
+  render() {
+    const dataSource = this.entriesToDataSource(this.props.entries);
     return <ListView
       style= {{backgroundColor: colors.dark, marginBottom: 110}}
-      dataSource={this.state.dataSource}
+      dataSource={dataSource}
       renderRow={this.renderCalendarEntries}
       renderSectionHeader = {this.renderSectionHeader}
-      onEndReached={this.fetchNextCalendarEntries.bind(this)}
+      onEndReached={this.props.onEndReached}
     />;
-  }
-
-  render() {
-    if (!this.state.loaded) {
-      return this.renderLoading();
-    }
-
-    return this.renderListView();
   }
 }
 
@@ -120,12 +85,7 @@ const styles = {
     paddingTop: 10,
     paddingBottom: 10,
   },
-  centering: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    backgroundColor: colors.dark,
-  },
 };
 
+CalendarEntries.propTypes = propTypes;
 export default CalendarEntries;
