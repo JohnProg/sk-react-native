@@ -2,26 +2,23 @@ import React from 'react-native';
 import colors from './colors';
 import ConcertScreen from './screens/concerts/concert-screens';
 import ArtistScreen from './screens/artists/artist-screens';
+import { TabBarIOS } from 'react-native-icons';
 
 const {
   AppRegistry,
   StatusBarIOS,
 } = React;
 
-const {
-  TabBarIOS,
-} = require('react-native-icons');
+const initialState = {
+  selectedTab: 'concerts',
+  username: 'arnaud-rinquin',
+};
 
 class Songkick extends React.Component {
   constructor() {
     super();
-
     StatusBarIOS.setStyle('light-content');
-
-    this.state = {
-      selectedTab: 'concerts',
-      username: 'arnaud-rinquin',
-    };
+    this.state = initialState;
   }
 
   render() {

@@ -1,5 +1,5 @@
 import React from 'react-native';
-import api from '../../songkick-api';
+import { UserCalendarPaginator } from '../../songkick-api';
 import colors from '../../colors';
 import CalendarEntry from './calendar-entry';
 import moment from 'moment';
@@ -24,10 +24,11 @@ class CalendarEntries extends React.Component {
           rowHasChanged           : (row1, row2) => row1 !== row2,
           sectionHeaderHasChanged : (s1, s2) => s1 !== s2
       }),
-      page: 1,
       entries: [],
-      hasMore: true
     };
+
+    this.setCalendarEntries = this.setCalendarEntries.bind(this);
+    this.paginator = new UserCalendarPaginator();
   }
 
   componentWillMount(){
@@ -35,53 +36,43 @@ class CalendarEntries extends React.Component {
   }
 
   fetchNextCalendarEntries() {
-    if (!this.state.hasMore || this.state.loadingMore) {
-      return;
-    }
+    const {username} = this.props;
+    this.paginator.fetchNext({username}).then(this.setCalendarEntries);
+  }
 
-    this.setState({
-      loadingMore: true
+  setCalendarEntries(entries) {
+    console.log('entries', entries);
+    const entriesByDate = entries.reduce(function(result, entry){
+      const date = entry.event.start.date;
+      result[date] = result[date] || [];
+      result[date].push(entry);
+
+      return result;
+    }, {});
+
+    const sectionIDs = [];
+    const rowIDs = [];
+    const dataBlob = {};
+
+    Object.keys(entriesByDate).forEach(function(date, index){
+      dataBlob[date] = date;
+      sectionIDs.push(date);
+      rowIDs[index] = [];
+      const entriesForDate = entriesByDate[date];
+
+      entriesForDate.forEach(function(entry){
+        const entryKey = `${date}:${entry.event.id}`;
+        rowIDs[index].push(entry.event.id);
+        dataBlob[entryKey] = entry;
+      });
     });
 
-    api.getUserCalendar(this.props.username, this.state.page).then((data) => {
-      const newCalendarEntries = data.resultsPage.results.calendarEntry;
-      const entries = this.state.entries.concat(newCalendarEntries);
-
-      const entriesByDate = entries.reduce(function(result, entry){
-        const date = entry.event.start.date;
-        result[date] = result[date] || [];
-        result[date].push(entry);
-
-        return result;
-      }, {});
-
-      const sectionIDs = [];
-      const rowIDs = [];
-      const dataBlob = {};
-
-      Object.keys(entriesByDate).forEach(function(date, index){
-        dataBlob[date] = date;
-        sectionIDs.push(date);
-        rowIDs[index] = [];
-        const entriesForDate = entriesByDate[date];
-
-        entriesForDate.forEach(function(entry){
-          const entryKey = `${date}:${entry.event.id}`;
-          rowIDs[index].push(entry.event.id);
-          dataBlob[entryKey] = entry;
-        });
-      });
-
-      const totalEntries = data.resultsPage.totalEntries;
-
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
-        loaded: true,
-        loadingMore: false,
-        page: ++this.state.page,
-        entries,
-        hasMore: entries.length < totalEntries
-      });
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
+      loaded: true,
+      loadingMore: false,
+      page: ++this.state.page,
+      entries,
     });
   }
 

@@ -1,5 +1,5 @@
 import React from 'react-native';
-import api from '../../songkick-api';
+import { TrackedArtistPaginator } from '../../songkick-api';
 import colors from '../../colors';
 
 const {
@@ -54,40 +54,28 @@ class Artists extends React.Component {
     this.state = {
       loaded: false,
       dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1.id !== r2.id }),
-      page: 1,
-      artists: [],
-      hasMore: true
+      artists: []
     };
 
     this.goToArtistDetails = this.goToArtistDetails.bind(this);
     this.renderArtist = this.renderArtist.bind(this);
     this.fetchNextArtists = this.fetchNextArtists.bind(this);
+    this.setArtists = this.setArtists.bind(this);
+
+    this.paginator = new TrackedArtistPaginator();
   }
   componentWillMount(){
     this.fetchNextArtists();
   }
   fetchNextArtists() {
-    if (!this.state.hasMore || this.state.loadingMore) {
-      return;
-    }
-
+    const {username} = this.props;
+    this.paginator.fetchNext({username}).then(this.setArtists);
+  }
+  setArtists(artists){
     this.setState({
-      loadingMore: true
-    });
-
-    api.getTrackedArtists(this.props.username, this.state.page).then((data) => {
-      const newArtists = data.resultsPage.results.artist;
-      const artists = this.state.artists.concat(newArtists);
-      const totalEntries = data.resultsPage.totalEntries;
-
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(artists),
-        loaded: true,
-        loadingMore: false,
-        page: ++this.state.page,
-        artists,
-        hasMore: artists.length < totalEntries
-      });
+      dataSource: this.state.dataSource.cloneWithRows(artists),
+      loaded: true,
+      artists,
     });
   }
 
