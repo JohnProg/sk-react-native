@@ -125,8 +125,9 @@ const styles = {
   dateSection: {
     color: colors.lighter,
     fontWeight: 'bold',
-    padding: 3,
-    marginLeft: 5,
+    marginLeft: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
   },
   centering: {
     flex: 1,

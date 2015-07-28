@@ -26,22 +26,26 @@ class CalendarEntry extends React.Component {
   }
 
   renderEventNameAndLocation(event) {
-    const name = this.removeDateFromEventName(event.displayName);
+    const name = this.extractEventName(event);
     const {city} = event.location;
+    const {venue} = event;
+    const location = [venue.displayName, city].join(', ');
     return (
       <View style={styles.eventName}>
         <Text style={styles.eventText}>{name}</Text>
-        <Text style={styles.eventLocation}>{city}</Text>
+        <Text style={styles.eventLocation}>{location}</Text>
       </View>
     );
   }
 
-  removeDateFromEventName(name) {
-    const index = name.indexOf(' (');
-    if (index !== -1) {
-      return name.substring(0, index);
+  extractEventName(event) {
+    if (event.type === 'Festival') {
+      return event.displayName;
     } else {
-      return name;
+      const mainPerformance = event.performance.filter(function(performance){
+        return performance.billing === 'headline';
+      })[0];
+      return mainPerformance.artist.displayName;
     }
   }
 }
@@ -65,13 +69,12 @@ const styles = {
     width: 275,
   },
   eventText: {
-    fontWeight: 'bold',
     fontSize: 14,
-    color: colors.light,
+    color: colors.lighter,
   },
   eventLocation: {
     fontSize: 10,
-    color: '#dedede',
+    color: colors.light,
   },
 };
 
