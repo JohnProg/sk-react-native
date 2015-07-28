@@ -24,6 +24,7 @@ const {
 } = require('react-native-blur');
 
 import EventDetails from './event-details';
+import ArtistRow from './artist-row';
 
 class ArtistScreen extends React.Component {
 
@@ -100,11 +101,29 @@ class Artists extends React.Component {
     });
   }
 
+  goToArtistDetails(artist) {
+    const {
+      navigator,
+      setCurrentArtistId,
+    } = this.props;
+    this.props.navigator.push({
+      title: artist.displayName,
+      backButtonTitle: ' ',
+      component: ArtistDetails,
+      passProps: {
+        navigator,
+        setCurrentArtistId,
+        artist,
+      },
+    });
+  }
+
   renderArtist(artist){
-    return <Artist
+    return <ArtistRow
       artist={artist}
       navigator={this.props.navigator}
       setCurrentArtistId={this.props.setCurrentArtistId}
+      onPress={this.goToArtistDetails.bind(this)}
     />;
   }
 
@@ -128,44 +147,6 @@ class Artists extends React.Component {
         renderRow={this.renderArtist.bind(this)}
         onEndReached={this.fetchNextArtists.bind(this)}
       />
-    );
-  }
-}
-
-class Artist extends React.Component {
-  artistDetails() {
-    this.props.navigator.push({
-      title: this.props.artist.displayName,
-      backButtonTitle: ' ',
-      component: ArtistDetails,
-      passProps: this.props,
-    });
-  }
-
-  renderOnTourLabel(artist){
-    if (!artist.onTourUntil) {
-      return;
-    }
-    return (
-      <View style={[styles.thumbnail, styles.onTourMask]}>
-        <Text style={styles.onTourLabel}>ON TOUR</Text>
-      </View>
-    );
-  }
-
-  render() {
-    const {artist} = this.props;
-    return (
-      <TouchableHighlight underlayColor={colors.pink} activeOpacity={0.5} onPress={this.artistDetails.bind(this)}>
-        <View style={styles.artist}>
-          <Image
-            style={styles.thumbnail}
-            source={ {uri: `https://images.sk-static.com/images/media/profile_images/artists/${artist.id}/large_avatar`} }
-          />
-          {this.renderOnTourLabel(artist)}
-          <Text style={styles.artistText}>{artist.displayName}</Text>
-        </View>
-      </TouchableHighlight>
     );
   }
 }
@@ -351,33 +332,6 @@ var styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.dark,
   },
-  thumbnail: {
-    marginTop: 5,
-    marginBottom: 5,
-    marginLeft: 10,
-    marginRight: 10,
-    width: 50,
-    height: 50,
-    borderRadius: 20,
-  },
-  onTourLabel: {
-    backgroundColor: colors.pink,
-    transform: [
-      {rotate: '-45deg'},
-      {translateX: -15},
-      // {translateY: },
-    ],
-    color: colors.lighter,
-    textAlign: 'center',
-    fontSize: 6,
-    fontWeight: '900',
-  },
-  onTourMask: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    overflow: 'hidden',
-  },
   artistBgImg: {
     flex: 1,
     resizeMode: 'cover',
@@ -392,11 +346,6 @@ var styles = StyleSheet.create({
   artists: {
     backgroundColor: colors.dark,
 
-  },
-  artist: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   event:{
     flex: 1,
@@ -438,11 +387,6 @@ var styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 15,
     right: 0,
-  },
-  artistText: {
-    flex: 1,
-    fontSize: 16,
-    color: colors.light
   },
   artistDetails: {
     flex: 1,
