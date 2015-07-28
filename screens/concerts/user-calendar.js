@@ -1,5 +1,4 @@
 import React from 'react-native';
-import { UserCalendarPaginator } from '../../songkick-api';
 import CalendarEntries from './calendar-entries';
 import colors from '../../colors';
 const {
@@ -8,7 +7,7 @@ const {
 } = React;
 
 const propTypes = {
-  username: React.PropTypes.string.isRequired
+  paginator: React.PropTypes.object.isRequired,
 };
 
 class UserCalendar extends React.Component {
@@ -18,23 +17,33 @@ class UserCalendar extends React.Component {
       userCalendarEntries: [],
       isLoading: true,
     };
-
-    this.paginator = new UserCalendarPaginator();
     this.fetchMoreUserCalendarEntries = this.fetchMoreUserCalendarEntries.bind(this);
+    this.setEntries = this.setEntries.bind(this);
   }
 
   componentWillMount(){
     this.fetchMoreUserCalendarEntries();
   }
 
-  fetchMoreUserCalendarEntries(){
-    const {username} = this.props;
-    this.paginator.fetchNext({username}).then(function(userCalendarEntries){
+  componentWillReceiveProps(nextProps){
+    if (this.props.paginator !== nextProps.paginator) {
       this.setState({
-        userCalendarEntries,
-        isLoading: false,
+        userCalendarEntries: [],
+        isLoading: true
       });
-    }.bind(this));
+      nextProps.paginator.fetchNext().then(this.setEntries);
+    }
+  }
+
+  setEntries(userCalendarEntries){
+    this.setState({
+      userCalendarEntries,
+      isLoading: false,
+    });
+  }
+
+  fetchMoreUserCalendarEntries(){
+    this.props.paginator.fetchNext().then(this.setEntries);
   }
 
   renderLoading(){

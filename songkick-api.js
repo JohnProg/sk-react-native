@@ -1,28 +1,32 @@
 import qs from 'query-string';
 const API_KEY = 'zdTK61Q0aF7ecOmt';
 const ROOT_URL = 'http://api.songkick.com/api/3.0/';
+import objAssign from 'object-assign';
 
 class Paginator {
 
-  constructor(fetchPage, extractPayload, checkHasMore){
+  constructor(fetchPage, extractPayload, checkHasMore, baseParams){
     this.fetchPage = fetchPage;
     this.extractPayload = extractPayload;
     this.checkHasMore = checkHasMore;
+    this.baseParams = baseParams;
     this.pageIndex = 1;
     this.hasMore = true;
     this.data = [];
     this.isLoading = false;
   }
 
-  fetchNext(params){
+  fetchNext(extraParams){
     if (!this.hasMore || this.isLoading) {
       return Promise.resolve(this.data);
     }
 
+    const requestParams = objAssign({}, this.baseParams, extraParams);
+
     this.isLoading = true;
     var requestResult;
 
-    return this.fetchPage(this.pageIndex++, params)
+    return this.fetchPage(this.pageIndex++, requestParams)
       .then(function(result){
         requestResult = result;
         return result;
@@ -57,12 +61,22 @@ class TrackedArtistPaginator extends Paginator {
 }
 
 class UserCalendarPaginator extends Paginator {
-  constructor(){
+  constructor(baseParams){
     super(function fetchUserCalendarEntriesPage(pageIndex, params){
-      return api.getUserCalendar(params.username, pageIndex);
+      return api.getUserCalendar(params.username, pageIndex, params.reason);
     }, function extractCalendarEntries(requestData){
       return requestData.resultsPage.results.calendarEntry;
-    }, checkHasMoreInResultsPage);
+    }, checkHasMoreInResultsPage, baseParams);
+  }
+}
+
+class UserEventsPaginator extends Paginator {
+  constructor(baseParams){
+    super(function fetchUserEventEntriesPage(pageIndex, params){
+      return api.getUserEvents(params.username, pageIndex, params.attendance);
+    }, function extractEventEntries(requestData){
+      return requestData.resultsPage.results.event;
+    }, checkHasMoreInResultsPage, baseParams);
   }
 }
 
@@ -80,6 +94,7 @@ function request(path, additionalQueryArgs) {
 const api = {
   TrackedArtistPaginator,
   UserCalendarPaginator,
+  UserEventsPaginator,
   getTrackedArtists(username, pageIndex = 1) {
       return request(`users/${username}/artists/tracked.json`, {
           page: pageIndex
@@ -91,10 +106,16 @@ const api = {
   getArtistCalendar(artistId) {
       return request(`artists/${artistId}/calendar.json`);
   },
-  getUserCalendar(username, pageIndex = 1) {
+  getUserCalendar(username, page = 1, reason = 'tracked_artist') {
       return request(`users/${username}/calendar.json`, {
-        page: pageIndex,
-        reason: 'tracked_artist'
+        page,
+        reason,
+      });
+  },
+  getUserEvents(username, page = 1, attendance = 'all') {
+      return request(`users/${username}/events.json`, {
+        page,
+        attendance,
       });
   }
 };

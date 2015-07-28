@@ -1,6 +1,7 @@
 import React from 'react-native';
 import colors from '../../colors';
-import UserCalendar from './user-calendar';
+import UserCalendars from './user-calendars';
+import {UserCalendarPaginator} from '../../songkick-api';
 
 const {
   NavigatorIOS,
@@ -15,7 +16,7 @@ class ConcertScreen extends React.Component {
       <NavigatorIOS
         style={styles.navigatorios}
         initialRoute={{
-          component: UserCalendar,
+          component: UserCalendars,
           title: 'Your concerts',
           passProps: {
             username: this.props.username
