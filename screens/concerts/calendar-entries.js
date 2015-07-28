@@ -2,6 +2,7 @@ import React from 'react-native';
 import api from '../../songkick-api';
 import colors from '../../colors';
 import CalendarEntry from './calendar-entry';
+import moment from 'moment';
 
 const {
   Text,
@@ -17,11 +18,16 @@ class CalendarEntries extends React.Component {
 
     this.state = {
       loaded: false,
-      dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1.id !== r2.id }),
+      dataSource: new ListView.DataSource({
+          getSectionData          : (dataBlob, sectionID) => dataBlob[sectionID],
+          getRowData              : (dataBlob, sectionID, rowID) => dataBlob[sectionID + ':' + rowID],
+          rowHasChanged           : (row1, row2) => row1 !== row2,
+          sectionHeaderHasChanged : (s1, s2) => s1 !== s2
+      }),
       page: 1,
-      events: [],
+      entries: [],
       hasMore: true
-    }
+    };
   }
 
   componentWillMount(){
@@ -29,7 +35,9 @@ class CalendarEntries extends React.Component {
   }
 
   fetchNextCalendarEntries() {
-    if (!this.state.hasMore || this.state.loadingMore) return;
+    if (!this.state.hasMore || this.state.loadingMore) {
+      return;
+    }
 
     this.setState({
       loadingMore: true
@@ -37,16 +45,42 @@ class CalendarEntries extends React.Component {
 
     api.getUserCalendar(this.props.username, this.state.page).then((data) => {
       const newCalendarEntries = data.resultsPage.results.calendarEntry;
-      const events = this.state.events.concat(newCalendarEntries);
+      const entries = this.state.entries.concat(newCalendarEntries);
+
+      const entriesByDate = entries.reduce(function(result, entry){
+        const date = entry.event.start.date;
+        result[date] = result[date] || [];
+        result[date].push(entry);
+
+        return result;
+      }, {});
+
+      const sectionIDs = [];
+      const rowIDs = [];
+      const dataBlob = {};
+
+      Object.keys(entriesByDate).forEach(function(date, index){
+        dataBlob[date] = date;
+        sectionIDs.push(date);
+        rowIDs[index] = [];
+        const entriesForDate = entriesByDate[date];
+
+        entriesForDate.forEach(function(entry){
+          const entryKey = `${date}:${entry.event.id}`;
+          rowIDs[index].push(entry.event.id);
+          dataBlob[entryKey] = entry;
+        });
+      });
+
       const totalEntries = data.resultsPage.totalEntries;
 
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(events),
+        dataSource: this.state.dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
         loaded: true,
         loadingMore: false,
         page: ++this.state.page,
-        events,
-        hasMore: events.length < totalEntries
+        entries,
+        hasMore: entries.length < totalEntries
       });
     });
   }
@@ -55,12 +89,27 @@ class CalendarEntries extends React.Component {
     return <CalendarEntry entry={calendarEntry}/>;
   }
 
+  renderSectionHeader(date){
+    const formatted = moment(date).format('dddd D MMMM YYYY');
+    return <Text style={styles.dateSection}>{formatted}</Text>;
+  }
+
   renderLoading(){
     return (
       <View style={styles.centering}>
-        <ActivityIndicatorIOS color={colors.pink} size="large"/>
+        <ActivityIndicatorIOS color={colors.light} size="large"/>
       </View>
     );
+  }
+
+  renderListView(){
+    return <ListView
+      style= {{backgroundColor: colors.dark, marginBottom: 110}}
+      dataSource={this.state.dataSource}
+      renderRow={this.renderCalendarEntries}
+      renderSectionHeader = {this.renderSectionHeader}
+      onEndReached={this.fetchNextCalendarEntries.bind(this)}
+    />;
   }
 
   render() {
@@ -68,23 +117,23 @@ class CalendarEntries extends React.Component {
       return this.renderLoading();
     }
 
-    return (
-      <ListView
-        style= {{backgroundColor: colors.dark}}
-        dataSource={this.state.dataSource}
-        renderRow={this.renderCalendarEntries.bind(this)}
-        onEndReached={this.fetchNextCalendarEntries.bind(this)}
-      />
-    );
+    return this.renderListView();
   }
 }
 
 const styles = {
+  dateSection: {
+    color: colors.lighter,
+    fontWeight: 'bold',
+    padding: 3,
+    marginLeft: 5,
+  },
   centering: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-around',
+    backgroundColor: colors.dark,
   },
-}
+};
 
-export default CalendarEntries
+export default CalendarEntries;
