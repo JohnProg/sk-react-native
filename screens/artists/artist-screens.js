@@ -142,6 +142,17 @@ class Artist extends React.Component {
     });
   }
 
+  renderOnTourLabel(artist){
+    if (!artist.onTourUntil) {
+      return;
+    }
+    return (
+      <View style={[styles.thumbnail, styles.onTourMask]}>
+        <Text style={styles.onTourLabel}>ON TOUR</Text>
+      </View>
+    );
+  }
+
   render() {
     const {artist} = this.props;
     return (
@@ -151,6 +162,7 @@ class Artist extends React.Component {
             style={styles.thumbnail}
             source={ {uri: `https://images.sk-static.com/images/media/profile_images/artists/${artist.id}/large_avatar`} }
           />
+          {this.renderOnTourLabel(artist)}
           <Text style={styles.artistText}>{artist.displayName}</Text>
         </View>
       </TouchableHighlight>
@@ -347,6 +359,24 @@ var styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 20,
+  },
+  onTourLabel: {
+    backgroundColor: colors.pink,
+    transform: [
+      {rotate: '-45deg'},
+      {translateX: -15},
+      // {translateY: },
+    ],
+    color: colors.lighter,
+    textAlign: 'center',
+    fontSize: 6,
+    fontWeight: '900',
+  },
+  onTourMask: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    overflow: 'hidden',
   },
   artistBgImg: {
     flex: 1,
