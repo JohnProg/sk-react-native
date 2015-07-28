@@ -9,11 +9,36 @@ const {
   View,
 } = React;
 
+const propTypes = {
+  artist: React.PropTypes.object.isRequired,
+  onPress: React.PropTypes.func.isRequired,
+};
+
 class ArtistRow extends React.Component {
-  renderOnTourLabel(artist){
-    if (!artist.onTourUntil) {
-      return;
-    }
+
+  constructor(){
+    super();
+    this.onPress = this.onPress.bind(this);
+    this.renderOnTourLabel = this.renderOnTourLabel.bind(this);
+  }
+
+  render() {
+    const {artist} = this.props;
+    return (
+      <TouchableHighlight underlayColor={colors.pink} activeOpacity={0.5} onPress={this.onPress}>
+        <View style={styles.container}>
+          <Image style={styles.thumbnail} source={ {uri: this.generateAvaterUri()} } />
+          {this.renderOnTourLabel()}
+          <Text style={styles.artistText}>{artist.displayName}</Text>
+        </View>
+      </TouchableHighlight>
+    );
+  }
+
+  renderOnTourLabel(){
+    const {artist} = this.props;
+    if (!artist.onTourUntil) { return; }
+
     return (
       <View style={[styles.thumbnail, styles.onTourMask]}>
         <Text style={styles.onTourLabel}>ON TOUR</Text>
@@ -21,28 +46,16 @@ class ArtistRow extends React.Component {
     );
   }
 
+  generateAvaterUri(){
+    return `https://images.sk-static.com/images/media/profile_images/artists/${this.props.artist.id}/large_avatar`;
+  }
+
   onPress(){
     this.props.onPress(this.props.artist);
   }
-
-  render() {
-    const {artist} = this.props;
-    return (
-      <TouchableHighlight underlayColor={colors.pink} activeOpacity={0.5} onPress={this.onPress.bind(this)}>
-        <View style={styles.container}>
-          <Image
-            style={styles.thumbnail}
-            source={ {uri: `https://images.sk-static.com/images/media/profile_images/artists/${artist.id}/large_avatar`} }
-          />
-          {this.renderOnTourLabel(artist)}
-          <Text style={styles.artistText}>{artist.displayName}</Text>
-        </View>
-      </TouchableHighlight>
-    );
-  }
 }
 
-
+ArtistRow.propTypes = propTypes;
 export default ArtistRow;
 
 var styles = StyleSheet.create({
@@ -60,7 +73,6 @@ var styles = StyleSheet.create({
     transform: [
       {rotate: '-45deg'},
       {translateX: -15},
-      // {translateY: },
     ],
     color: colors.lighter,
     textAlign: 'center',

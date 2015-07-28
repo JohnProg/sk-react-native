@@ -9,10 +9,11 @@ const {
   StyleSheet,
 } = React;
 
+const propTypes = {
+  event: React.PropTypes.object.isRequired,
+};
+
 class EventDetails extends React.Component {
-  formatDate(date) {
-    return moment(date).format('dddd DD MMM YYYY');
-  }
 
   render() {
     const {event} = this.props;
@@ -22,22 +23,33 @@ class EventDetails extends React.Component {
             <Text style={styles.textHeader}>{this.formatDate(event.start.date)}</Text>
             <Text style={styles.textHeader}>{event.venue.displayName}</Text>
           </View>
-          <MapView
-            style={styles.map}
-            annotations={[{
-              longitude: event.location.lng,
-              latitude: event.location.lat,
-              title: event.venue.displayName,
-            }]}
-            region={{
-              longitude: event.location.lng,
-              latitude: event.location.lat,
-              longitudeDelta: 0.01,
-              latitudeDelta: 0.01,
-            }}
-          />
+          {this.renderMap()}
       </View>
     );
+  }
+
+  renderMap(){
+    const {event} = this.props;
+    if (event.location.lat && event.location.lng) {
+      return <MapView
+        style={styles.map}
+        annotations={[{
+          longitude: event.location.lng,
+          latitude: event.location.lat,
+          title: event.venue.displayName,
+        }]}
+        region={{
+          longitude: event.location.lng,
+          latitude: event.location.lat,
+          longitudeDelta: 0.01,
+          latitudeDelta: 0.01,
+        }}
+      />;
+    }
+  }
+
+  formatDate(date) {
+    return moment(date).format('dddd DD MMM YYYY');
   }
 }
 var styles = StyleSheet.create({
@@ -54,4 +66,6 @@ var styles = StyleSheet.create({
     color: colors.light,
   },
 });
+
+EventDetails.propTypes = propTypes;
 export default EventDetails;
