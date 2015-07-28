@@ -2,8 +2,6 @@ import React from 'react-native';
 import colors from '../../colors';
 
 const {
-  Text,
-  View,
   NavigatorIOS,
 } = React;
 
@@ -34,6 +32,6 @@ const styles = {
   navigatorios: {
     flex: 1
   }
-}
+};
 
-export default ConcertScreen
+export default ConcertScreen;

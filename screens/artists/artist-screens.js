@@ -31,7 +31,7 @@ class ArtistScreen extends React.Component {
     super();
     this.state = {
       currentArtistID: null
-    }
+    };
   }
 
   setCurrentArtistId(currentArtistID) {
@@ -41,7 +41,7 @@ class ArtistScreen extends React.Component {
   }
 
   render() {
-    return (<NavigatorIOS
+    return <NavigatorIOS
       style={styles.navigatorios}
       initialRoute={{
         component: Artists,
@@ -55,7 +55,7 @@ class ArtistScreen extends React.Component {
       barTintColor={colors.darker}
       titleTextColor={colors.light}
       translucent={false}
-     />)
+     />;
   }
 }
 
@@ -70,13 +70,15 @@ class Artists extends React.Component {
       page: 1,
       artists: [],
       hasMore: true
-    }
+    };
   }
   componentWillMount(){
     this.fetchNextArtists();
   }
   fetchNextArtists() {
-    if (!this.state.hasMore || this.state.loadingMore) return;
+    if (!this.state.hasMore || this.state.loadingMore) {
+      return;
+    }
 
     this.setState({
       loadingMore: true
@@ -95,7 +97,7 @@ class Artists extends React.Component {
         artists,
         hasMore: artists.length < totalEntries
       });
-    })
+    });
   }
 
   renderArtist(artist){
@@ -103,12 +105,12 @@ class Artists extends React.Component {
       artist={artist}
       navigator={this.props.navigator}
       setCurrentArtistId={this.props.setCurrentArtistId}
-    />
+    />;
   }
 
   renderLoading(){
     return (
-      <View style={styles.centering} >
+      <View style={[styles.centering, styles.bottomBarMargin]} >
         <ActivityIndicatorIOS color={colors.pink} size="large"/>
       </View>
     );
@@ -121,7 +123,7 @@ class Artists extends React.Component {
 
     return (
       <ListView
-        style={styles.artists}
+        style={[styles.artists, styles.bottomBarMargin]}
         dataSource={this.state.dataSource}
         renderRow={this.renderArtist.bind(this)}
         onEndReached={this.fetchNextArtists.bind(this)}
@@ -141,7 +143,7 @@ class Artist extends React.Component {
   }
 
   render() {
-    const {artist} = this.props
+    const {artist} = this.props;
     return (
       <TouchableHighlight underlayColor={colors.pink} activeOpacity={0.5} onPress={this.artistDetails.bind(this)}>
         <View style={styles.artist}>
@@ -152,7 +154,7 @@ class Artist extends React.Component {
           <Text style={styles.artistText}>{artist.displayName}</Text>
         </View>
       </TouchableHighlight>
-    )
+    );
   }
 }
 
@@ -165,7 +167,7 @@ class ArtistDetails extends React.Component {
       page: 1,
       events: [],
       hasMore: true
-    }
+    };
   }
 
   componentWillUnmount(){
@@ -178,7 +180,9 @@ class ArtistDetails extends React.Component {
   }
 
   fetchEvents() {
-    if (!this.state.hasMore || this.state.loadingMore) return;
+    if (!this.state.hasMore || this.state.loadingMore) {
+      return;
+    }
 
     this.setState({
       loadingMore: true
@@ -208,7 +212,9 @@ class ArtistDetails extends React.Component {
         hasMore,
       });
 
-      if (hasMore) this.fetchEvents();
+      if (hasMore) {
+        this.fetchEvents();
+      }
     });
   }
 
@@ -218,11 +224,10 @@ class ArtistDetails extends React.Component {
       artist={this.props.artist}
       navigator={this.props.navigator}
       key={event.id}
-    />
+    />;
   }
 
   renderLoading(){
-    const {artist} = this.props
     return (
       <View style={styles.centering} >
         <ActivityIndicatorIOS color={colors.pink} size="large"/>
@@ -247,7 +252,7 @@ class ArtistDetails extends React.Component {
     }
 
     return (
-      <View style={styles.artistDetails}>
+      <View style={[styles.artistDetails, styles.bottomBarMargin]}>
         <Image
           style={styles.artistBgImg}
           source={ {uri: `https://images.sk-static.com/images/media/profile_images/artists/${artist.id}/huge_avatar`} }
@@ -282,7 +287,7 @@ class Event extends React.Component {
 
   removeDateFromEventName(name) {
     const index = name.indexOf(' (');
-    if(index !== -1){
+    if (index !== -1) {
       return name.substring(0, index);
     } else {
       return name;
@@ -311,16 +316,16 @@ class Event extends React.Component {
   }
 
   render() {
-    const {event} = this.props
+    const {event} = this.props;
     return (
       <TouchableHighlight underlayColor={colors.pink} onPress={this.eventDetails.bind(this)}>
         <View style={styles.event}>
           {this.renderDate(event.start.date)}
           {this.renderEventNameAndLocation.bind(this)(event)}
           <Icon
-            name='fontawesome|angle-right'
+            name="fontawesome|angle-right"
             size={30}
-            color='#ffffff'
+            color="#ffffff"
             style={styles.arrow}
           />
         </View>
@@ -411,7 +416,9 @@ var styles = StyleSheet.create({
   },
   artistDetails: {
     flex: 1,
-    paddingBottom: 108,
+  },
+  bottomBarMargin:{
+    marginBottom: 110,
   },
   navigatorios: {
     flex: 1,

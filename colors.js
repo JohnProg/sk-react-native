@@ -4,4 +4,4 @@ export default {
   darker: '#25282D',
   lighter: '#DDDCE1',
   light: '#B0B0B0'
-}
+};

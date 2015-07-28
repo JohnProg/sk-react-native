@@ -1,5 +1,4 @@
 import React from 'react-native';
-import api from '../../songkick-api';
 import colors from '../../colors';
 
 const {
@@ -23,7 +22,7 @@ class CalendarEntry extends React.Component {
           {this.renderEventNameAndLocation.bind(this)(event)}
         </View>
       // </TouchableHighlight>
-    )
+    );
   }
 
   renderEventNameAndLocation(event) {
@@ -39,7 +38,7 @@ class CalendarEntry extends React.Component {
 
   removeDateFromEventName(name) {
     const index = name.indexOf(' (');
-    if(index !== -1){
+    if (index !== -1) {
       return name.substring(0, index);
     } else {
       return name;
@@ -74,6 +73,6 @@ const styles = {
     fontSize: 10,
     color: '#dedede',
   },
-}
+};
 
-export default CalendarEntry
+export default CalendarEntry;

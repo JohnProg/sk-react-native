@@ -15,7 +15,7 @@ class EventDetails extends React.Component {
   }
 
   render() {
-    const {event, artist} = this.props;
+    const {event} = this.props;
     return (
       <View>
           <View style={styles.header}>
@@ -54,4 +54,4 @@ var styles = StyleSheet.create({
     color: colors.light,
   },
 });
-export default EventDetails
+export default EventDetails;
