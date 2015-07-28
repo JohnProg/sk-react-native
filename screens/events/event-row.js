@@ -84,8 +84,8 @@ var styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.15)',
     paddingTop: 5,
     paddingBottom: 5,
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingLeft: 8,
+    paddingRight: 8,
   },
   eventTextTopRow: {
     fontWeight: 'bold',
@@ -97,19 +97,18 @@ var styles = StyleSheet.create({
     color: colors.light,
   },
   eventDate: {
-    width: 60,
+    width: 50,
   },
   eventName:{
-    width: 275,
+    flex: 1,
+    paddingRight: 10,
+    paddingLeft: 10,
   },
   eventDateYear: {
     color: colors.lighter,
   },
   arrow: {
-    width: 20,
+    width: 15,
     height: 20,
-    paddingLeft: 10,
-    paddingRight: 15,
-    right: 0,
   },
 });
