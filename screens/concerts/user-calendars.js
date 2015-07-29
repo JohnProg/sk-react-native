@@ -1,7 +1,7 @@
 import React from 'react-native';
 import colors from '../../colors';
 import UserCalendar from './user-calendar';
-import Radio from '../common/radio';
+import RadioButtons from 'react-native-radio-buttons';
 import {UserCalendarPaginator} from '../../songkick-api';
 import EventDetails from '../events/event-details';
 
@@ -73,12 +73,12 @@ class UserCalendars extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Radio
+        <RadioButtons
           options={this.state.calendars}
           onSelection={this.setCalendar}
           selectedOption={this.state.calendar}
-          renderOption={Radio.getTextOptionRenderer(styles.radioBase, [styles.radioBase, styles.radioSelected], (calendar) => calendar.label)}
-          renderContainer={Radio.getViewContainerRenderer(styles.radioContainer)}
+          renderOption={RadioButtons.getTextOptionRenderer(styles.radioBase, [styles.radioBase, styles.radioSelected], (calendar) => calendar.label)}
+          renderContainer={RadioButtons.getViewContainerRenderer(styles.radioContainer)}
         />
         <UserCalendar paginator={this.state.calendar.paginator} onEntrySelected={this.onEntrySelected}/>
       </View>
