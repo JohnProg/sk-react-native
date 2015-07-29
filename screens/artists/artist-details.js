@@ -1,11 +1,11 @@
 import React from 'react-native';
-import {BlurView} from 'react-native-blur';
 
 import api from '../../songkick-api';
 import colors from '../../colors';
 
 import EventDetails from '../events/event-details';
 import EventRow from '../events/event-row';
+import ArtistBlurredBackground from './artist-blurred-background';
 
 const {
   ActivityIndicatorIOS,
@@ -80,8 +80,9 @@ class ArtistDetails extends React.Component {
   }
 
   showEventDetails(event){
+    const title = event.type === 'Festival' ? event.displayName : this.props.artist.displayName;
     this.props.navigator.push({
-      title: this.props.artist.displayName,
+      title: title,
       component: EventDetails,
       backButtonTitle: ' ',
       passProps: {
@@ -124,25 +125,18 @@ class ArtistDetails extends React.Component {
     }
 
     return (
-      <View style={[styles.artistDetails, styles.bottomBarMargin]}>
-        <Image
-          style={styles.artistBgImg}
-          source={ {uri: `https://images.sk-static.com/images/media/profile_images/artists/${artist.id}/huge_avatar`} }
-        >
-          <BlurView blurType="dark" style={{flex: 1, backgroundColor: 'transparent',}}>
-            <ScrollView style={{flex: 1}}>
-              <View style={styles.imgContainer}>
-                <Image
-                  style={styles.img}
-                  source={{uri: `https://images.sk-static.com/images/media/profile_images/artists/${artist.id}/huge_avatar`}}
-                />
-              </View>
-              {msg}
-              {this.state.events.map(this.renderEvent)}
-            </ScrollView>
-          </BlurView>
-        </Image>
-      </View>
+      <ArtistBlurredBackground artistId={artist.id}>
+        <ScrollView style={{flex: 1}}>
+          <View style={styles.imgContainer}>
+            <Image
+              style={styles.img}
+              source={{uri: `https://images.sk-static.com/images/media/profile_images/artists/${artist.id}/huge_avatar`}}
+            />
+          </View>
+          {msg}
+          {this.state.events.map(this.renderEvent)}
+        </ScrollView>
+      </ArtistBlurredBackground>
     );
   }
 }

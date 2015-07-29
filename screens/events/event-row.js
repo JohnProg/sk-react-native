@@ -27,12 +27,11 @@ class EventRow extends React.Component {
     this.props.onPress(this.props.event);
   }
 
-  removeDateFromEventName(name) {
-    const index = name.indexOf(' (');
-    if (index !== -1) {
-      return name.substring(0, index);
+  extractEventName(event) {
+    if (event.type === 'Festival') {
+      return event.displayName;
     } else {
-      return name;
+      return event.venue.displayName;
     }
   }
 
@@ -48,7 +47,7 @@ class EventRow extends React.Component {
 
   renderEventNameAndLocation() {
     const {event} = this.props;
-    const name = this.removeDateFromEventName(event.displayName);
+    const name = this.extractEventName(event);
     const {city} = event.location;
     return (
       <View style={styles.eventName}>
@@ -81,20 +80,21 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.15)',
+    backgroundColor: 'rgba(50,50,50,0.2)',
     paddingTop: 5,
     paddingBottom: 5,
     paddingLeft: 8,
     paddingRight: 8,
+    marginBottom: 1,
   },
   eventTextTopRow: {
     fontWeight: 'bold',
     fontSize: 14,
-    color: colors.lighter,
+    color: '#ffffff',
   },
   eventTextBottomRow: {
     fontSize: 12,
-    color: colors.light,
+    color: '#eeeeee',
   },
   eventDate: {
     width: 50,
