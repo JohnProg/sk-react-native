@@ -95,7 +95,7 @@ const styles = {
   },
   radioBase: {
     flex: 1,
-    margin: 10,
+    padding: 10,
     textAlign: 'center',
     color: colors.light
   },
