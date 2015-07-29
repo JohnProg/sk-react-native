@@ -49,6 +49,9 @@ class UserCalendar extends React.Component {
     return <CalendarEntries
       entries={this.state.userCalendarEntries}
       onEndReached={this.fetchMoreUserCalendarEntries}
+      onEntrySelected={function(entry){
+        this.props.onEntrySelected(entry);
+      }.bind(this)}
     />;
   }
 }

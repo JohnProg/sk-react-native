@@ -3,6 +3,7 @@ import colors from '../../colors';
 import UserCalendar from './user-calendar';
 import Radio from '../common/radio';
 import {UserCalendarPaginator} from '../../songkick-api';
+import EventDetails from '../events/event-details';
 
 const {
   View,
@@ -16,6 +17,7 @@ class UserCalendars extends React.Component {
   constructor(){
     super();
     this.setCalendar = this.setCalendar.bind(this);
+    this.onEntrySelected = this.onEntrySelected.bind(this);
   }
 
   generateCalendars(username){
@@ -49,6 +51,24 @@ class UserCalendars extends React.Component {
     });
   }
 
+  onEntrySelected(entry){
+    const {navigator} = this.props;
+    const {event} = entry;
+    if (navigator) {
+      const title = event.type === 'Festival' ? event.displayName : event.performance[0].artist.displayName;
+
+      navigator.push({
+        title,
+        backButtonTitle: ' ',
+        component: EventDetails,
+        passProps: {
+          navigator,
+          event,
+        },
+      });
+    }
+  }
+
   render() {
 
     return (
@@ -60,7 +80,7 @@ class UserCalendars extends React.Component {
           renderOption={Radio.getTextOptionRenderer(styles.radioBase, [styles.radioBase, styles.radioSelected], (calendar) => calendar.label)}
           renderContainer={Radio.getViewContainerRenderer(styles.radioContainer)}
         />
-        <UserCalendar paginator={this.state.calendar.paginator}/>
+        <UserCalendar paginator={this.state.calendar.paginator} onEntrySelected={this.onEntrySelected}/>
       </View>
     );
   }

@@ -9,7 +9,9 @@ const {
 } = React;
 
 const propTypes = {
-  entries: React.PropTypes.array.isRequired
+  entries: React.PropTypes.array.isRequired,
+  onEndReached: React.PropTypes.func,
+  onEntrySelected: React.PropTypes.func.isRequired,
 };
 
 class CalendarEntries extends React.Component {
@@ -25,6 +27,9 @@ class CalendarEntries extends React.Component {
           sectionHeaderHasChanged : (s1, s2) => s1 !== s2
       }),
     };
+
+    this.onPress = this.onPress.bind(this);
+    this.renderCalendarEntries = this.renderCalendarEntries.bind(this);
   }
 
   entriesToDataSource(entries) {
@@ -56,8 +61,12 @@ class CalendarEntries extends React.Component {
     return this.state.dataSource.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs);
   }
 
+  onPress(calendarEntry){
+    this.props.onEntrySelected(calendarEntry);
+  }
+
   renderCalendarEntries(calendarEntry){
-    return <CalendarEntry entry={calendarEntry}/>;
+    return <CalendarEntry entry={calendarEntry} onPress={this.onPress}/>;
   }
 
   renderSectionHeader(date){

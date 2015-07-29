@@ -2,18 +2,24 @@ import React from 'react-native';
 import colors from '../../colors';
 
 const {
-  Text,
-  View,
   Image,
+  Text,
+  TouchableWithoutFeedback,
+  View,
 } = React;
 
 class CalendarEntry extends React.Component {
+
+  constructor(){
+    super();
+    this.onPress = this.onPress.bind(this);
+  }
 
   render() {
     const {event} = this.props.entry;
     const {artist} = event.performance[0];
     return (
-      // <TouchableHighlight underlayColor={colors.pink} activeOpacity={0.5} onPress={this.eventDetails.bind(this)}>
+      <TouchableWithoutFeedback onPress={this.onPress}>
         <View style={styles.container}>
           <Image
             style={styles.thumbnail}
@@ -21,8 +27,14 @@ class CalendarEntry extends React.Component {
           />
           {this.renderEventNameAndLocation.bind(this)(event)}
         </View>
-      // </TouchableHighlight>
+      </TouchableWithoutFeedback>
     );
+  }
+
+  onPress(){
+    if (this.props.onPress) {
+      this.props.onPress(this.props.entry);
+    }
   }
 
   renderEventNameAndLocation(event) {
