@@ -1,7 +1,6 @@
 import React from 'react-native';
 import colors from '../../colors';
 import UserCalendars from './user-calendars';
-import {UserCalendarPaginator} from '../../songkick-api';
 
 const {
   NavigatorIOS,
