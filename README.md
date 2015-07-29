@@ -14,6 +14,7 @@ An experimentation to see how cool is React Native:
 * [React Parts components library](https://react.parts/native-ios)
 * [How to render ListView with section headers](http://moduscreate.com/react-native-listview-with-section-headers/)
 * [Smart and dumb components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0) by [@dan_abramov](https://twitter.com/@dan_abramov)
+* [Ready to use jsfiddle React playground](http://jsfiddle.net/reactjs/69z2wepo/)
 
 # Notes
 
