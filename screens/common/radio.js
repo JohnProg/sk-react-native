@@ -49,9 +49,9 @@ class Radio extends React.Component {
   }
 
   static getTextOptionRenderer(normalStyle, selectedStyle, extractText) {
-    return function renderOption(renderData, selected, onSelect, index){
+    return function renderOption(option, selected, onSelect, index){
       const style = selected ? selectedStyle : normalStyle;
-      const label = extractText ? extractText(renderData) : renderData;
+      const label = extractText ? extractText(option) : option;
       return (
         <TouchableWithoutFeedback onPress={onSelect} key={index}>
           <Text style={style}>{label}</Text>
