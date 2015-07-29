@@ -9,15 +9,14 @@ const {
   StyleSheet,
 } = React;
 
-const propTypes = {
-  event: React.PropTypes.object.isRequired,
-};
 class EventLocationDetails extends React.Component {
+  static propTypes = {
+    event: React.PropTypes.object.isRequired,
+  };
 
   render() {
 
     const {event} = this.props;
-
     const {
       start,
       venue,
@@ -104,5 +103,4 @@ var styles = StyleSheet.create({
   }
 });
 
-EventLocationDetails.propTypes = propTypes;
 export default EventLocationDetails;

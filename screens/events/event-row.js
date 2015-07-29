@@ -10,12 +10,11 @@ const {
   View,
 } = React;
 
-const propTypes = {
-  event: React.PropTypes.object.isRequired,
-  onPress: React.PropTypes.func.isRequired,
-};
-
 class EventRow extends React.Component {
+  static propTypes = {
+    event: React.PropTypes.object.isRequired,
+    onPress: React.PropTypes.func.isRequired,
+  };
 
   constructor(){
     super();
@@ -70,9 +69,6 @@ class EventRow extends React.Component {
     );
   }
 }
-
-EventRow.propTypes = propTypes;
-
 export default EventRow;
 
 var styles = StyleSheet.create({

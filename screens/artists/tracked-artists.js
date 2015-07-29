@@ -13,10 +13,6 @@ class TrackedArtists extends React.Component {
     };
 
     this.paginator = new TrackedArtistPaginator();
-
-    this.goToArtistDetails = this.goToArtistDetails.bind(this);
-    this.fetchNextArtists = this.fetchNextArtists.bind(this);
-    this.setArtists = this.setArtists.bind(this);
   }
 
   render(){
@@ -30,7 +26,7 @@ class TrackedArtists extends React.Component {
     />;
   }
 
-  setArtists(artists){
+  setArtists = (artists) => {
     this.setState({
       loaded: true,
       artists,
@@ -41,12 +37,12 @@ class TrackedArtists extends React.Component {
     this.fetchNextArtists();
   }
 
-  fetchNextArtists() {
+  fetchNextArtists = () => {
     const {username} = this.props;
     this.paginator.fetchNext({username}).then(this.setArtists);
   }
 
-  goToArtistDetails(artist) {
+  goToArtistDetails = (artist) => {
     this.props.setCurrentArtistId(artist.id);
 
     const {

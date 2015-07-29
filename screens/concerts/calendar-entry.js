@@ -9,12 +9,6 @@ const {
 } = React;
 
 class CalendarEntry extends React.Component {
-
-  constructor(){
-    super();
-    this.onPress = this.onPress.bind(this);
-  }
-
   render() {
     const {event} = this.props.entry;
     const {artist} = event.performance[0];
@@ -31,7 +25,7 @@ class CalendarEntry extends React.Component {
     );
   }
 
-  onPress(){
+  onPress = () => {
     if (this.props.onPress) {
       this.props.onPress(this.props.entry);
     }

@@ -10,11 +10,10 @@ const {
   StyleSheet,
 } = React;
 
-const propTypes = {
-  event: React.PropTypes.object.isRequired,
-};
-
 class EventDetails extends React.Component {
+  static propTypes = {
+    event: React.PropTypes.object.isRequired,
+  };
 
   render() {
     const {event} = this.props;
@@ -79,5 +78,4 @@ var styles = StyleSheet.create({
   }
 });
 
-EventDetails.propTypes = propTypes;
 export default EventDetails;

@@ -6,10 +6,10 @@ const {
   NavigatorIOS,
 } = React;
 
-const propTypes = {
-  username: React.PropTypes.string.isRequired
-};
 class ConcertScreen extends React.Component {
+  static propTypes = {
+    username: React.PropTypes.string.isRequired
+  };
   render() {
     return (
       <NavigatorIOS
@@ -36,5 +36,4 @@ const styles = {
   }
 };
 
-ConcertScreen.propTypes = propTypes;
 export default ConcertScreen;

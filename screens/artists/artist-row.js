@@ -9,17 +9,11 @@ const {
   View,
 } = React;
 
-const propTypes = {
-  artist: React.PropTypes.object.isRequired,
-  onPress: React.PropTypes.func.isRequired,
-};
-
 class ArtistRow extends React.Component {
 
-  constructor(){
-    super();
-    this.onPress = this.onPress.bind(this);
-    this.renderOnTourLabel = this.renderOnTourLabel.bind(this);
+  static propTypes = {
+    artist: React.PropTypes.object.isRequired,
+    onPress: React.PropTypes.func.isRequired,
   }
 
   render() {
@@ -35,7 +29,7 @@ class ArtistRow extends React.Component {
     );
   }
 
-  renderOnTourLabel(){
+  renderOnTourLabel = () => {
     const {artist} = this.props;
     if (!artist.onTourUntil) { return; }
 
@@ -50,12 +44,11 @@ class ArtistRow extends React.Component {
     return `https://images.sk-static.com/images/media/profile_images/artists/${this.props.artist.id}/large_avatar`;
   }
 
-  onPress(){
+  onPress = () => {
     this.props.onPress(this.props.artist);
   }
 }
 
-ArtistRow.propTypes = propTypes;
 export default ArtistRow;
 
 var styles = StyleSheet.create({

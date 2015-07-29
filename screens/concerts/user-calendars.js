@@ -9,15 +9,13 @@ const {
   View,
 } = React;
 
-const propTypes = {
-  username: React.PropTypes.string.isRequired
-};
 class UserCalendars extends React.Component {
+  static propTypes = {
+    username: React.PropTypes.string.isRequired
+  };
 
   constructor(){
     super();
-    this.setCalendar = this.setCalendar.bind(this);
-    this.onEntrySelected = this.onEntrySelected.bind(this);
   }
 
   generateCalendars(username){
@@ -45,13 +43,13 @@ class UserCalendars extends React.Component {
     });
   }
 
-  setCalendar(calendar){
+  setCalendar = (calendar) => {
     this.setState({
       calendar
     });
   }
 
-  onEntrySelected(entry){
+  onEntrySelected = (entry) => {
     const {navigator} = this.props;
     const {event} = entry;
     if (navigator) {
@@ -106,5 +104,4 @@ const styles = {
   }
 };
 
-UserCalendars.propTypes = propTypes;
 export default UserCalendars;

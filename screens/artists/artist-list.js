@@ -15,11 +15,9 @@ class ArtistList extends React.Component {
       loaded: false,
       dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1.id !== r2.id })
     };
-
-    this.renderArtist = this.renderArtist.bind(this);
   }
 
-  renderArtist(artist){
+  renderArtist = (artist) => {
     return <ArtistRow
       artist={artist}
       onPress={this.props.onArtistPressed}

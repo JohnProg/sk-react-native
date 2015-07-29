@@ -26,9 +26,6 @@ class ArtistDetails extends React.Component {
       events: [],
       hasMore: true
     };
-
-    this.showEventDetails = this.showEventDetails.bind(this);
-    this.renderEvent = this.renderEvent.bind(this);
   }
 
   componentWillUnmount(){
@@ -79,7 +76,7 @@ class ArtistDetails extends React.Component {
     });
   }
 
-  showEventDetails(event){
+  showEventDetails = (event) => {
     const title = event.type === 'Festival' ? event.displayName : this.props.artist.displayName;
     this.props.navigator.push({
       title: title,
@@ -91,7 +88,7 @@ class ArtistDetails extends React.Component {
     });
   }
 
-  renderEvent(event){
+  renderEvent = (event) =>{
     return <EventRow
       event={event}
       artist={this.props.artist}

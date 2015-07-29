@@ -2,19 +2,17 @@ import React from 'react-native';
 import CalendarEntries from './calendar-entries';
 import FullpageLoader from '../common/fullpage-loader';
 
-const propTypes = {
-  paginator: React.PropTypes.object.isRequired,
-};
-
 class UserCalendar extends React.Component {
+  static propTypes = {
+    paginator: React.PropTypes.object.isRequired,
+  };
+
   constructor(){
     super();
     this.state = {
       userCalendarEntries: [],
       isLoading: true,
     };
-    this.fetchMoreUserCalendarEntries = this.fetchMoreUserCalendarEntries.bind(this);
-    this.setEntries = this.setEntries.bind(this);
   }
 
   componentWillMount(){
@@ -31,14 +29,14 @@ class UserCalendar extends React.Component {
     }
   }
 
-  setEntries(userCalendarEntries){
+  setEntries = (userCalendarEntries) => {
     this.setState({
       userCalendarEntries,
       isLoading: false,
     });
   }
 
-  fetchMoreUserCalendarEntries(){
+  fetchMoreUserCalendarEntries = () => {
     this.props.paginator.fetchNext().then(this.setEntries);
   }
 
@@ -55,6 +53,4 @@ class UserCalendar extends React.Component {
     />;
   }
 }
-
-UserCalendar.propTypes = propTypes;
 export default UserCalendar;
