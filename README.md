@@ -75,3 +75,9 @@ Headache-less way of doing it:
 1. Switch `Always Search User Paths` to `Yes`
 1. Restart XCode
 1. Profit
+
+### I changed some js code but it doesn't show on built app?!
+
+There is a dev mode flip switch in `./iOS/AppDelegate.m`, line 35: if false then it'll always run the S3 hosted `.jsbundle` file.
+
+I don't yet how to change that through a different XCode target build or environment. PR welcome.
