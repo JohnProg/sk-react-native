@@ -33,7 +33,9 @@ class Paginator {
       })
       .then(this.extractPayload)
       .then(function(extractedPayload){
-        this.data = [].concat(this.data, extractedPayload);
+        if (extractedPayload) { // don't update data if there is nothing new
+          this.data = [].concat(this.data, extractedPayload);
+        }
       }.bind(this))
       .then(function() {
         this.hasMore = this.checkHasMore(this.data, requestResult);
@@ -51,9 +53,9 @@ function checkHasMoreInResultsPage(extractedData, requestResult) {
 }
 
 class TrackedArtistPaginator extends Paginator {
-  constructor(){
-    super(function fetchTrackArtistsPage(pageIndex, params){
-      return api.getTrackedArtists(params.username, pageIndex);
+  constructor(username){
+    super(function fetchTrackArtistsPage(pageIndex){
+      return api.getTrackedArtists(username, pageIndex);
     }, function extractTrackedArtists(requestData){
       return requestData.resultsPage.results.artist;
     }, checkHasMoreInResultsPage);
@@ -87,6 +89,11 @@ function request(path, additionalQueryArgs) {
     const url = `${ROOT_URL}${path}?${qs.stringify(queryArgs)}`;
 
     return fetch(url).then(function(response){
+      if (response.status === 404) {
+        throw new Error('Not found');
+      }
+      return response;
+    }).then(function(response){
         return response.json();
     });
 }
@@ -95,6 +102,14 @@ const api = {
   TrackedArtistPaginator,
   UserCalendarPaginator,
   UserEventsPaginator,
+  assertUserExists(username){
+    // use the artist API as a username test :/
+    return api.getTrackedArtists(username)
+      .then(() => username)
+      .catch(function(){
+        throw new Error('User does not exist');
+      });
+  },
   getTrackedArtists(username, pageIndex = 1) {
       return request(`users/${username}/artists/tracked.json`, {
           page: pageIndex

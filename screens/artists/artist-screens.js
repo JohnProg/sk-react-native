@@ -16,23 +16,35 @@ class ArtistScreen extends React.Component {
     };
   }
 
-  setCurrentArtistId(currentArtistID) {
+  setCurrentArtistId = (currentArtistID) => {
     this.setState({
       currentArtistID
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    const {username} = nextProps;
+    if (username !== this.props.username) {
+      this.refs.navigator.replace(this.makeYourArtistsRoute(username));
+    }
+  }
+
+  makeYourArtistsRoute(username){
+    return {
+      component: TrackedArtists,
+      title: 'Your artists',
+      passProps: {
+        username,
+        setCurrentArtistId: this.setCurrentArtistId,
+      }
+    };
+  }
+
   render() {
     return <NavigatorIOS
+      ref="navigator"
       style={styles.navigatorios}
-      initialRoute={{
-        component: TrackedArtists,
-        title: 'Your artists',
-        passProps: {
-          username: this.props.username,
-          setCurrentArtistId: this.setCurrentArtistId.bind(this),
-        }
-      }}
+      initialRoute={this.makeYourArtistsRoute(this.props.username)}
       tintColor={colors.light}
       barTintColor={colors.darker}
       titleTextColor={colors.light}

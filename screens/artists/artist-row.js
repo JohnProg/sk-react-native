@@ -21,7 +21,7 @@ class ArtistRow extends React.Component {
     return (
       <TouchableHighlight underlayColor={colors.pink} activeOpacity={0.5} onPress={this.onPress}>
         <View style={styles.container}>
-          <Image style={styles.thumbnail} source={ {uri: this.generateAvaterUri()} } />
+          <Image style={styles.thumbnail} source={ {uri: this.generateAvaterUri()} } key={artist.id}/>
           {this.renderOnTourLabel()}
           <Text style={styles.artistText}>{artist.displayName}</Text>
         </View>

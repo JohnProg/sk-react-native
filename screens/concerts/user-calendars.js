@@ -19,7 +19,7 @@ class UserCalendars extends React.Component {
   }
 
   generateCalendars(username){
-    return [
+    const calendars = [
       {
         label: 'Your artists',
         paginator: new UserCalendarPaginator({username})
@@ -31,16 +31,22 @@ class UserCalendars extends React.Component {
         })
       }
     ];
-  }
-
-  componentWillMount() {
-    const {username} = this.props;
-    const calendars = this.generateCalendars(username);
 
     this.setState({
       calendars,
       calendar: calendars[0],
     });
+  }
+
+  componentWillReceiveProps(nextProps){
+    const {username} = nextProps;
+    if (username !== this.props.username) {
+      this.generateCalendars(nextProps.username);
+    }
+  }
+
+  componentWillMount() {
+    this.generateCalendars(this.props.username);
   }
 
   setCalendar = (calendar) => {

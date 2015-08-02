@@ -4,9 +4,14 @@ const {
   Image,
   StyleSheet,
   View,
+  PropTypes,
 } = React;
 
 class ArtistBlurredBackground extends React.Component {
+  static propTypes = {
+    artistId: PropTypes.number.isRequired
+  }
+
   render() {
     const {artistId} = this.props;
     const uri = `https://images.sk-static.com/images/media/profile_images/artists/${artistId}/huge_avatar`;

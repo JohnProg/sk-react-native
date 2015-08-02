@@ -6,6 +6,7 @@ import moment from 'moment';
 const {
   ListView,
   Text,
+  View,
 } = React;
 
 class CalendarEntries extends React.Component {
@@ -70,7 +71,17 @@ class CalendarEntries extends React.Component {
     return <Text style={styles.dateSection}>{formatted}</Text>;
   }
 
+  renderEmpty(){
+    return (<View style={styles.emptyView}>
+      <Text style={styles.emptyText}>There is nothing to show here :(</Text>
+    </View>);
+  }
+
   render() {
+    if (!this.props.entries.length) {
+      return this.renderEmpty();
+    }
+
     const dataSource = this.entriesToDataSource(this.props.entries);
     return <ListView
       style= {{backgroundColor: colors.dark, marginBottom: 110}}
@@ -90,6 +101,16 @@ const styles = {
     paddingTop: 10,
     paddingBottom: 10,
   },
+  emptyView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.dark,
+    paddingBottom: 108,
+  },
+  emptyText: {
+    color: colors.light,
+  }
 };
 
 export default CalendarEntries;
