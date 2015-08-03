@@ -57,7 +57,7 @@ class LoginForm extends React.Component {
           defaultValue={this.props.username}
           value={this.props.username}
           onChangeText={(username) => this.setState({
-            username,
+            username: username.trim(),
             userNotFound: false,
           })}
           placeholder={'Your songkick username'}
