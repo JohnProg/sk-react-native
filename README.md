@@ -83,3 +83,8 @@ By default, this project is setup to run local code in simulator and S3 hosted c
 
 If you want to change that, go to the project settings in XCode, search for `macros` and make it `DEBUG` is define for your target platform to run local code, or undefined to run
 S3 hosted.
+
+# Credits
+
+* @vjo [twitter](twitter.com/vjo) [github](https://github.com/vjo) from Twitter
+* @ArnaudRinquin [twitter](twitter.com/ArnaudRinquin) [github](https://github.com/ArnaudRinquin) from Songkick
