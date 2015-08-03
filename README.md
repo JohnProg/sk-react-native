@@ -17,6 +17,12 @@ An experimentation to see how cool is React Native:
 * [Ready to use jsfiddle React playground](http://jsfiddle.net/reactjs/69z2wepo/)
 * [Defining dev/prod target builds in XCode](http://stackoverflow.com/a/10498308/1265207)
 
+# Screenshots!
+
+![Screenshots be here](./screenshots.png)
+
+_Note: results after ~a week~ as a side project. Probably not up to date._
+
 # Notes
 
 ## Project setup
