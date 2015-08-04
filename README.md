@@ -92,5 +92,5 @@ S3 hosted.
 
 # Credits
 
-* @vjo [twitter](twitter.com/vjo) [github](https://github.com/vjo) from Twitter
-* @ArnaudRinquin [twitter](twitter.com/ArnaudRinquin) [github](https://github.com/ArnaudRinquin) from Songkick
+* @vjo [twitter](https://twitter.com/vjo) [github](https://github.com/vjo) from Twitter
+* @ArnaudRinquin [twitter](https://twitter.com/ArnaudRinquin) [github](https://github.com/ArnaudRinquin) from Songkick
